@@ -79,7 +79,7 @@ class PreferencesMenu extends ui.OptionsState.Page
 		#end
 
 		if (!getPref('fps-counter'))
-			FlxG.stage.removeChild(Main.fpsCounter);
+			FlxG.stage.removeChild(Main.fpsVar);
 
 		FlxG.autoPause = getPref('auto-pause');
 	}
@@ -134,9 +134,9 @@ class PreferencesMenu extends ui.OptionsState.Page
 		{
 			case 'fps-counter':
 				if (getPref('fps-counter'))
-					FlxG.stage.addChild(Main.fpsCounter);
+					FlxG.stage.addChild(Main.fpsVar);
 				else
-					FlxG.stage.removeChild(Main.fpsCounter);
+					FlxG.stage.removeChild(Main.fpsVar);
 			case 'auto-pause':
 				FlxG.autoPause = getPref('auto-pause');
 		}

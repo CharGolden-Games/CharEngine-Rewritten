@@ -899,12 +899,13 @@ class PlayState extends MusicBeatState
 					});
 				case 'senpai' | 'roses' | 'thorns':
 					schoolIntro(doof);
-				case 'ugh':
+				// THESE ARE BROKEN.	
+				/* case 'ugh':
 					ughIntro();
 				case 'stress':
 					stressIntro();
 				case 'guns':
-					gunsIntro();
+					gunsIntro(); */
 
 				default:
 					startCountdown();
@@ -932,12 +933,13 @@ class PlayState extends MusicBeatState
 
 	function ughIntro()
 	{
-		inCutscene = true;
+		startCountdown();
 
-		var blackShit:FlxSprite = new FlxSprite(-200, -200).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
+		/* var blackShit:FlxSprite = new FlxSprite(-200, -200).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
 		blackShit.scrollFactor.set();
 		add(blackShit);
 
+		// This is brokey
 		var vid:FlxVideo = new FlxVideo('music/ughCutscene.mp4');
 		vid.finishCallback = function()
 		{
@@ -950,7 +952,7 @@ class PlayState extends MusicBeatState
 		FlxG.camera.zoom = defaultCamZoom * 1.2;
 
 		camFollow.x += 100;
-		camFollow.y += 100;
+		camFollow.y += 100; */
 
 		/* 
 			FlxG.sound.playMusic(Paths.music('DISTORTO'), 0);
