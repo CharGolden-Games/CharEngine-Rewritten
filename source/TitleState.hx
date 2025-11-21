@@ -32,7 +32,7 @@ import openfl.net.NetStream;
 import shaderslmfao.BuildingShaders.BuildingShader;
 import shaderslmfao.BuildingShaders;
 import shaderslmfao.ColorSwap;
-import ui.PreferencesMenu;
+//import ui.PreferencesMenu;
 
 using StringTools;
 
@@ -90,8 +90,8 @@ class TitleState extends MusicBeatState
 		super.create();
 
 		FlxG.save.bind('funkin', 'ninjamuffin99');
-		PreferencesMenu.initPrefs();
-		PlayerSettings.init();
+		//PreferencesMenu.initPrefs();
+		//PlayerSettings.init();
 		Highscore.load();
 
 		#if newgrounds

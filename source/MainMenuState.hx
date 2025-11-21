@@ -18,8 +18,8 @@ import flixel.util.FlxTimer;
 import lime.app.Application;
 import ui.AtlasMenuList;
 import ui.MenuList;
-import ui.OptionsState;
-import ui.PreferencesMenu;
+/* import ui.OptionsState;
+import ui.PreferencesMenu; */
 import ui.Prompt;
 
 using StringTools;
@@ -78,7 +78,7 @@ class MainMenuState extends MusicBeatState
 		magenta.visible = false;
 		magenta.antialiasing = true;
 		magenta.color = 0xFFfd719b;
-		if (PreferencesMenu.preferences.get('flashing-menu'))
+		if (ClientPrefs.data.flashing)
 			add(magenta);
 		// magenta.scrollFactor.set();
 
@@ -102,7 +102,7 @@ class MainMenuState extends MusicBeatState
 		else
 			menuItems.createItem('donate', selectDonate, hasPopupBlocker);
 		#end
-		menuItems.createItem('options', function() startExitState(new OptionsState()));
+		//menuItems.createItem('options', function() startExitState(new OptionsState()));
 		// #if newgrounds
 		// 	if (NGio.isLoggedIn)
 		// 		menuItems.createItem("logout", selectLogout);

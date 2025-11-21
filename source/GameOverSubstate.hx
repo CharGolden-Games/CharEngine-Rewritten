@@ -7,7 +7,7 @@ import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import haxe.display.Display.Package;
-import ui.PreferencesMenu;
+//import ui.PreferencesMenu;
 
 class GameOverSubstate extends MusicBeatSubstate
 {
@@ -60,7 +60,7 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		var randomCensor:Array<Int> = [];
 
-		if (PreferencesMenu.getPref('censor-naughty'))
+		if (!ClientPrefs.data.naughtyness)
 			randomCensor = [1, 3, 8, 13, 17, 21];
 
 		randomGameover = FlxG.random.int(1, 25, randomCensor);

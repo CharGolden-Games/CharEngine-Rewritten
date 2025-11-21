@@ -1,6 +1,6 @@
 package;
 
-import Controls.Control;
+import Controls;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
@@ -180,7 +180,7 @@ class PauseSubState extends MusicBeatSubstate
 		if (FlxG.keys.justPressed.J)
 		{
 			// for reference later!
-			// PlayerSettings.player1.controls.replaceBinding(Control.LEFT, Keys, FlxKey.J, null);
+			// Controls.instance.replaceBinding(Control.LEFT, Keys, FlxKey.J, null);
 		}
 	}
 

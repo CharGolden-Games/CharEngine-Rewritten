@@ -75,7 +75,7 @@ class MenuTypedList<T:MenuItem> extends FlxTypedGroup<T>
 	
 	inline function updateControls()
 	{
-		var controls = PlayerSettings.player1.controls;
+		var controls = Controls.instance;
 		
 		var wrapX = wrapMode.match(Horizontal | Both);
 		var wrapY = wrapMode.match(Vertical | Both);
