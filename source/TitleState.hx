@@ -1,5 +1,6 @@
 package;
 
+import flixel.input.keyboard.FlxKey;
 import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.FlxSprite;
@@ -67,13 +68,17 @@ class TitleState extends MusicBeatState
 	var netStream:NetStream;
 	private var overlay:Sprite;
 
+	public static var volumeUpKeys:Array<FlxKey> = [PLUS, NUMPADPLUS];
+	public static var volumeDownKeys:Array<FlxKey> = [MINUS, NUMPADMINUS];
+	public static var muteKeys:Array<FlxKey> = [ZERO, NUMPADZERO];
+
 	override public function create():Void
 	{
-		#if polymod
-		polymod.Polymod.init({modRoot: "mods", dirs: ['introMod'], framework: OPENFL});
-		// FlxG.bitmap.clearCache();
-		#end
-
+        FlxG.sound.playMusic(Paths.music("freakyMenu"), 0); // crash fix
+		FlxG.sound.music.stop();
+		FlxG.save.bind('funkin', 'ninjamuffin99');
+		ClientPrefs.loadPrefs();
+		Highscore.load();
 		startedIntro = false;
 
 		FlxG.game.focusLostFramerate = 60;
@@ -81,22 +86,11 @@ class TitleState extends MusicBeatState
 		swagShader = new ColorSwap();
 		alphaShader = new BuildingShaders();
 
-		FlxG.sound.muteKeys = [ZERO];
-
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 
 		// DEBUG BULLSHIT
 
 		super.create();
-
-		FlxG.save.bind('funkin', 'ninjamuffin99');
-		//PreferencesMenu.initPrefs();
-		//PlayerSettings.init();
-		Highscore.load();
-
-		#if newgrounds
-		NGio.init();
-		#end
 
 		if (FlxG.save.data.weekUnlocked != null)
 		{
@@ -396,14 +390,6 @@ class TitleState extends MusicBeatState
 
 		if (pressedEnter && !transitioning && skippedIntro)
 		{
-			if (FlxG.sound.music != null)
-				FlxG.sound.music.onComplete = null;
-			// netStream.play(Paths.file('music/kickstarterTrailer.mp4'));
-			NGio.unlockMedal(60960);
-
-			// If it's Friday according to da clock
-			if (Date.now().getDay() == 5)
-				NGio.unlockMedal(61034);
 
 			titleText.animation.play('press');
 
@@ -413,33 +399,8 @@ class TitleState extends MusicBeatState
 			transitioning = true;
 			// FlxG.sound.music.stop();
 
-			#if newgrounds
-			if (!OutdatedSubState.leftState)
-			{
-				NGio.checkVersion(function(version)
-				{
-					// Check if version is outdated
-
-					var localVersion:String = "v" + Application.current.meta.get('version');
-					var onlineVersion = version.split(" ")[0].trim();
-
-					if (version.trim() != onlineVersion)
-					{
-						trace('OLD VERSION!');
-						// FlxG.switchState(new OutdatedSubState());
-					}
-					else
-					{
-						// FlxG.switchState(new MainMenuState());
-					}
-
-					// REDO FOR ITCH/FINAL SHIT
-					FlxG.switchState(new MainMenuState());
-				});
-			}
-			#else
+			
 			FlxG.switchState(new MainMenuState());
-			#end
 			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 		}
 
@@ -461,10 +422,10 @@ class TitleState extends MusicBeatState
 		// if (FlxG.keys.justPressed.SPACE)
 		// swagShader.hasOutline = !swagShader.hasOutline;
 
-		if (controls.UI_LEFT)
+		if (FlxG.keys.justPressed.LEFT)
 			swagShader.update(-elapsed * 0.1);
 
-		if (controls.UI_RIGHT)
+		if (FlxG.keys.justPressed.RIGHT)
 			swagShader.update(elapsed * 0.1);
 
 		super.update(elapsed);

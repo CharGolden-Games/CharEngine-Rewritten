@@ -10,6 +10,7 @@ import lime.app.Application;
 class OutdatedSubState extends MusicBeatState
 {
 	public static var leftState:Bool = false;
+	public static var nextVer:String = '';
 
 	override function create()
 	{
@@ -21,7 +22,7 @@ class OutdatedSubState extends MusicBeatState
 			"HEY! You're running an outdated version of the game!\nCurrent version is "
 			+ ver
 			+ " while the most recent version is "
-			+ NGio.GAME_VER
+			+ nextVer
 			+ "! Press Space to go to itch.io, or ESCAPE to ignore this!!",
 			32);
 		txt.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);

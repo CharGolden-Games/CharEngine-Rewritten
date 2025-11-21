@@ -1,5 +1,6 @@
 package backend;
 
+import flixel.util.FlxSave;
 import flixel.input.gamepad.FlxGamepadInputID;
 import flixel.input.keyboard.FlxKey;
 
@@ -56,5 +57,80 @@ class ClientPrefs
 		'reset'			=> [BACK]
 	];
 
-	public static var data:SaveVariables = new SaveVariables();
+	public static var defaultBinds:Map<String, Array<FlxKey>>;
+	public static var defaultGamepadBinds:Map<String, Array<FlxGamepadInputID>>;
+
+	public static var data:SaveVariables = null;
+	public static var defaultData:SaveVariables = null;
+
+	public static function savePrefs()
+	{
+		for (field in Reflect.fields(data))
+		{
+			Reflect.setField(FlxG.save.data, field, Reflect.field(data, field));
+		}
+		FlxG.save.flush();
+
+		var save:FlxSave = new FlxSave();
+		save.bind("controls_v2", "CharGoldenGames");
+
+		save.data.keyboard = keyBinds;
+		save.data.gamepad = gamepadBinds;
+		save.flush();
+		FlxG.log.add("Preferences Saved!");
+		trace("Preferences Saved!");
+	}
+
+	public static function loadPrefs()
+	{
+		if (data == null) data = new SaveVariables();
+		if (defaultData == null) defaultData = new SaveVariables();
+
+		for (field in Reflect.fields(FlxG.save.data))
+		{
+			if (Reflect.hasField(data, field))
+			{
+				Reflect.setField(data, field, Reflect.field(FlxG.save.data, field));
+			}
+		}
+
+		reloadBinds();
+	}
+
+	public static function reloadBinds()
+	{
+		var save:FlxSave = new FlxSave();
+		save.bind("controls_v2", "CharGoldenGames");
+
+		if(save != null)
+		{
+			if(save.data.keyboard != null)
+			{
+				var loadedControls:Map<String, Array<FlxKey>> = save.data.keyboard;
+				for (control => keys in loadedControls)
+					if(keyBinds.exists(control)) keyBinds.set(control, keys);
+			}
+			if(save.data.gamepad != null)
+			{
+				var loadedControls:Map<String, Array<FlxGamepadInputID>> = save.data.gamepad;
+				for (control => keys in loadedControls)
+					if(gamepadBinds.exists(control)) gamepadBinds.set(control, keys);
+			}
+			reloadVolumeKeys();
+		}
+	}
+
+	public static function reloadVolumeKeys()
+	{
+		TitleState.muteKeys = keyBinds.get('volume_mute').copy();
+		TitleState.volumeDownKeys = keyBinds.get('volume_down').copy();
+		TitleState.volumeUpKeys = keyBinds.get('volume_up').copy();
+		toggleVolumeKeys(true);
+	}
+	public static function toggleVolumeKeys(?turnOn:Bool = true)
+	{
+		FlxG.sound.muteKeys = turnOn ? TitleState.muteKeys : [];
+		FlxG.sound.volumeDownKeys = turnOn ? TitleState.volumeDownKeys : [];
+		FlxG.sound.volumeUpKeys = turnOn ? TitleState.volumeUpKeys : [];
+	}
 }

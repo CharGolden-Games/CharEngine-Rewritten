@@ -1,5 +1,7 @@
 package;
 
+import flixel.system.FlxSound;
+import lime.app.Application;
 import flixel.FlxGame;
 import flixel.FlxState;
 import openfl.Assets;
@@ -13,6 +15,7 @@ import openfl.events.NetStatusEvent;
 import openfl.media.Video;
 import openfl.net.NetConnection;
 import openfl.net.NetStream;
+import openfl.events.UncaughtErrorEvent;
 
 class Main extends Sprite
 {
@@ -77,11 +80,18 @@ class Main extends Sprite
 			game.height = Math.ceil(stageHeight / game.zoom);
 		}
 
+		new Controls();
 		addChild(new FlxGame(game.width, game.height, game.initialState, game.fps, game.fps, game.skipSplash, game.startFullscreen));
+		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
 
 		#if !mobile
 		fpsVar = new FPS(10, 3, 0xFFFFFF);
 		addChild(fpsVar);
 		#end
+	}
+
+	function onCrash(e:UncaughtErrorEvent):Void
+	{
+		Application.current.window.alert(e.error, "Crash!");
 	}
 }

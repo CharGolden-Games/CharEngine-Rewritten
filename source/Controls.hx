@@ -162,5 +162,7 @@ class Controls
 	{
 		keyboardBinds = ClientPrefs.keyBinds;
 		gamepadBinds = ClientPrefs.gamepadBinds;
+
+		instance = this;
 	}
 }
