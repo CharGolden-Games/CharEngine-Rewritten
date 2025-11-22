@@ -1,5 +1,6 @@
 package;
 
+import flixel.util.FlxColor;
 import Section.SwagSection;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -17,6 +18,7 @@ class Character extends FlxSprite
 
 	public var isPlayer:Bool = false;
 	public var curCharacter:String = 'bf';
+	public var healthbarColor:FlxColor = 0xFFFF0000;
 
 	public var holdTimer:Float = 0;
 
@@ -26,6 +28,8 @@ class Character extends FlxSprite
 	{
 		super(x, y);
 
+		if (isPlayer) healthbarColor = 0xFF00FF00;
+
 		animOffsets = new Map<String, Array<Dynamic>>();
 		curCharacter = character;
 		this.isPlayer = isPlayer;
@@ -33,7 +37,7 @@ class Character extends FlxSprite
 		var tex:FlxAtlasFrames;
 		antialiasing = true;
 
-		switch (curCharacter)
+		switch (curCharacter) // Leaving this here if you wanna hardcode character assets.
 		{
 			case 'gf':
 				// GIRLFRIEND CODE

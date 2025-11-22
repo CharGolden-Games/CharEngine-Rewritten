@@ -21,7 +21,7 @@ class MainMenuState extends MusicBeatState
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
-	var optionShit:Array<String> = ['story_mode', 'freeplay'];
+	var optionShit:Array<String> = ['story_mode', 'freeplay', 'options'];
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
@@ -136,7 +136,6 @@ class MainMenuState extends MusicBeatState
 
 			if (controls.ACCEPT)
 			{
-					selectedSomethin = true;
 					FlxG.sound.play(Paths.sound("confirmMenu"));
 					FlxFlicker.flicker(magenta, 1.1, 0.15, false);
 					goToState();
@@ -156,8 +155,10 @@ class MainMenuState extends MusicBeatState
 		switch (optionShit[curSelected])
 		{
 			case "story_mode":
+				selectedSomethin = true;
 				FlxG.switchState(new StoryMenuState());
 			case 'freeplay':
+				selectedSomethin = true;
 				FlxG.switchState(new FreeplayState());
 		}
 	}

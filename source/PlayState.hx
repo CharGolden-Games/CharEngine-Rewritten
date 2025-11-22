@@ -133,8 +133,16 @@ class PlayState extends MusicBeatState
 	var tankWatchtower:BGSprite;
 	var tankGround:BGSprite;
 
-	var talking:Bool = true;
 	var songScore:Int = 0;
+	var songMisses:Int = 0;
+	var shits:Int = 0;
+	var bads:Int = 0;
+	var goods:Int = 0;
+	var sicks:Int = 0;
+	var totalNotesHit:Float = 0;
+	var totalPlayed:Int = 0;
+
+	var talking:Bool = true;
 	var scoreTxt:FlxText;
 
 	var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
@@ -395,26 +403,26 @@ class PlayState extends MusicBeatState
 
 				// defaultCamZoom = 0.9;
 
-				var bgSky = new FlxSprite().loadGraphic(Paths.image('weeb/weebSky'));
+				var bgSky = new FlxSprite().loadGraphic(Paths.image('weeb/weebSky', "week6"));
 				bgSky.scrollFactor.set(0.1, 0.1);
 				add(bgSky);
 
 				var repositionShit = -200;
 
-				var bgSchool:FlxSprite = new FlxSprite(repositionShit, 0).loadGraphic(Paths.image('weeb/weebSchool'));
+				var bgSchool:FlxSprite = new FlxSprite(repositionShit, 0).loadGraphic(Paths.image('weeb/weebSchool', "week6"));
 				bgSchool.scrollFactor.set(0.6, 0.90);
 				add(bgSchool);
 
-				var bgStreet:FlxSprite = new FlxSprite(repositionShit).loadGraphic(Paths.image('weeb/weebStreet'));
+				var bgStreet:FlxSprite = new FlxSprite(repositionShit).loadGraphic(Paths.image('weeb/weebStreet', "week6"));
 				bgStreet.scrollFactor.set(0.95, 0.95);
 				add(bgStreet);
 
-				var fgTrees:FlxSprite = new FlxSprite(repositionShit + 170, 130).loadGraphic(Paths.image('weeb/weebTreesBack'));
+				var fgTrees:FlxSprite = new FlxSprite(repositionShit + 170, 130).loadGraphic(Paths.image('weeb/weebTreesBack', "week6"));
 				fgTrees.scrollFactor.set(0.9, 0.9);
 				add(fgTrees);
 
 				var bgTrees:FlxSprite = new FlxSprite(repositionShit - 380, -800);
-				var treetex = Paths.getPackerAtlas('weeb/weebTrees');
+				var treetex = Paths.getPackerAtlas('weeb/weebTrees', "week6");
 				bgTrees.frames = treetex;
 				bgTrees.animation.add('treeLoop', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], 12);
 				bgTrees.animation.play('treeLoop');
@@ -422,7 +430,7 @@ class PlayState extends MusicBeatState
 				add(bgTrees);
 
 				var treeLeaves:FlxSprite = new FlxSprite(repositionShit, -40);
-				treeLeaves.frames = Paths.getSparrowAtlas('weeb/petals');
+				treeLeaves.frames = Paths.getSparrowAtlas('weeb/petals', "week6");
 				treeLeaves.animation.addByPrefix('leaves', 'PETALS ALL', 24, true);
 				treeLeaves.animation.play('leaves');
 				treeLeaves.scrollFactor.set(0.85, 0.85);
@@ -818,7 +826,7 @@ class PlayState extends MusicBeatState
 
 		FlxG.fixedTimestep = false;
 
-		healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
+		healthBarBG = new FlxSprite(0, FlxG.height * 0.88).loadGraphic(Paths.image('healthBar'));
 		healthBarBG.screenCenter(X);
 		healthBarBG.scrollFactor.set();
 		add(healthBarBG);
@@ -829,12 +837,12 @@ class PlayState extends MusicBeatState
 		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
 			'health', 0, 2);
 		healthBar.scrollFactor.set();
-		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
+		getHealthbarColors();
 		// healthBar
 		add(healthBar);
 
-		scoreTxt = new FlxText(healthBarBG.x + healthBarBG.width - 190, healthBarBG.y + 30, 0, "", 20);
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		scoreTxt = new FlxText(healthBarBG.x, healthBarBG.y + 40, healthBarBG.width, 'Score: 0', 20);
+		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
 
@@ -1346,6 +1354,12 @@ class PlayState extends MusicBeatState
 		});*/
 	}
 
+	function getHealthbarColors()
+	{
+		healthBar.createFilledBar(dad.healthbarColor, boyfriend.healthbarColor);
+		healthBar.updateBar();
+	}
+
 	function initDiscord():Void
 	{
 		#if discord_rpc
@@ -1382,7 +1396,7 @@ class PlayState extends MusicBeatState
 		red.scrollFactor.set();
 
 		var senpaiEvil:FlxSprite = new FlxSprite();
-		senpaiEvil.frames = Paths.getSparrowAtlas('weeb/senpaiCrazy');
+		senpaiEvil.frames = Paths.getSparrowAtlas('weeb/senpaiCrazy', "week6");
 		senpaiEvil.animation.addByPrefix('idle', 'Senpai Pre Explosion', 24, false);
 		senpaiEvil.setGraphicSize(Std.int(senpaiEvil.width * daPixelZoom));
 		senpaiEvil.scrollFactor.set();
@@ -1527,7 +1541,9 @@ class PlayState extends MusicBeatState
 
 	function readySetGo(path:String):Void
 	{
-		var spr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(path));
+		var lib:String = null;
+		if (curStage.startsWith('school')) lib = 'week6';
+		var spr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(path, lib));
 		spr.scrollFactor.set();
 
 		if (curStage.startsWith('school'))
@@ -1680,7 +1696,7 @@ class PlayState extends MusicBeatState
 			switch (curStage)
 			{
 				case 'school' | 'schoolEvil':
-					babyArrow.loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels'), true, 17, 17);
+					babyArrow.loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels', "week6"), true, 17, 17);
 					babyArrow.animation.add('green', [6]);
 					babyArrow.animation.add('red', [7]);
 					babyArrow.animation.add('blue', [5]);
@@ -1923,7 +1939,7 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		scoreTxt.text = "Score:" + songScore;
+		updateScoreTxt();
 
 		if (controls.PAUSE && startedCountdown && canPause)
 		{
@@ -2254,6 +2270,41 @@ class PlayState extends MusicBeatState
 			keyShit();
 	}
 
+	function floorDecimal(value:Float, decimals:Int):Float
+	{
+		if(decimals < 1)
+		{
+			return Math.floor(value);
+		}
+
+		var tempMult:Float = 1;
+		for (i in 0...decimals)
+		{
+			tempMult *= 10;
+		}
+		var newValue:Float = Math.floor(value * tempMult);
+		return newValue / tempMult;
+	}
+
+	var ratingFC:String = '';
+	function recalcFC()
+	{
+			if (sicks > 0) ratingFC = "SFC";
+			if (goods > 0) ratingFC = "GFC";
+			if (bads > 0 || shits > 0) ratingFC = "FC";
+			if (songMisses > 0 && songMisses < 10) ratingFC = "SDCB";
+			else if (songMisses >= 10) ratingFC = "Clear";
+	}
+
+	function updateScoreTxt()
+	{
+		if (totalPlayed < 1) return;
+		var ratingPercent = Math.min(1, Math.max(0, totalNotesHit / totalPlayed));
+		recalcFC();
+
+		scoreTxt.text = 'Score: $songScore | Messed up $songMisses times | Accuracy: ${floorDecimal(ratingPercent * 100, 2)}% [$ratingFC]\nRating: Unimplemented';
+	}
+
 	function killCombo():Void
 	{
 		if (combo > 5 && gf.animOffsets.exists('sad'))
@@ -2394,25 +2445,38 @@ class PlayState extends MusicBeatState
 
 		var daRating:String = "sick";
 
-		var isSick:Bool = true;
+		var isSick:Bool = false;
 
+		// todo: Make the noteDiff refer to an array lmao.
 		if (noteDiff > Conductor.safeZoneOffset * 0.9)
 		{
 			daRating = 'shit';
-			score = 50;
-			isSick = false; // shitty copypaste on this literally just because im lazy and tired lol!
 		}
 		else if (noteDiff > Conductor.safeZoneOffset * 0.75)
 		{
 			daRating = 'bad';
-			score = 100;
-			isSick = false;
 		}
 		else if (noteDiff > Conductor.safeZoneOffset * 0.2)
 		{
 			daRating = 'good';
+		}
+		switch (daRating)
+		{
+			case "sick":
+			sicks++;
+			isSick = true;
+			totalNotesHit++;
+			case "good":
+			goods++;
 			score = 200;
-			isSick = false;
+			totalNotesHit += 0.7;
+			case "bad":
+			score = 100;
+			bads++;
+			totalNotesHit += 0.4;
+			case "shit":
+			score = 50;
+			shits++;
 		}
 
 		if (isSick)
@@ -2482,14 +2546,16 @@ class PlayState extends MusicBeatState
 	{
 		var pixelShitPart1:String = "";
 		var pixelShitPart2:String = '';
+		var lib:String = null;
 
 		if (curStage.startsWith('school'))
 		{
 			pixelShitPart1 = 'weeb/pixelUI/';
 			pixelShitPart2 = '-pixel';
+			lib = "week6";
 		}
 
-		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'combo' + pixelShitPart2));
+		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'combo' + pixelShitPart2, lib));
 		comboSpr.y = FlxG.camera.scroll.y + FlxG.camera.height * 0.4 + 80;
 		comboSpr.x = FlxG.width * 0.55;
 		// make sure combo is visible lol!
@@ -2745,12 +2811,15 @@ class PlayState extends MusicBeatState
 
 	function noteMiss(direction:Int = 1):Void
 	{
+		totalPlayed++;
 		// whole function used to be encased in if (!boyfriend.stunned)
 		health -= 0.04;
 		killCombo();
 
 		if (!practiceMode)
 			songScore -= 10;
+
+		songMisses++;
 
 		vocals.volume = 0;
 		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
@@ -2833,6 +2902,7 @@ class PlayState extends MusicBeatState
 			});
 
 			note.wasGoodHit = true;
+			totalPlayed++;
 			vocals.volume = 1;
 
 			if (!note.isSustainNote)
