@@ -1,6 +1,6 @@
 package;
 
-#if discord_rpc
+#if ALLOW_DISCORD
 import Discord.DiscordClient;
 #end
 import flash.text.TextField;
@@ -49,7 +49,7 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
-		#if discord_rpc
+		#if ALLOW_DISCORD
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
@@ -107,10 +107,17 @@ class FreeplayState extends MusicBeatState
 
 		for (i in 0...songs.length)
 		{
-			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, songs[i].songName, true, false);
+			var songText:Alphabet = new Alphabet(90, 320, songs[i].songName, true);
 			songText.isMenuItem = true;
-			songText.targetY = i;
+			songText.targetY = i - curSelected;
 			grpSongs.add(songText);
+
+			var maxWidth = 980;
+			if (songText.width > maxWidth)
+			{
+				songText.scaleX = maxWidth / songText.width;
+			}
+			songText.snapToPosition();
 
 			var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
 			icon.sprTracker = songText;
@@ -280,9 +287,8 @@ class FreeplayState extends MusicBeatState
 		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
 		// lerpScore = 0;
 
-		#if PRELOAD_ALL
-		FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
-		#end
+		if (ClientPrefs.data.playInstInFreeplay)
+			FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
 
 		var bullShit:Int = 0;
 

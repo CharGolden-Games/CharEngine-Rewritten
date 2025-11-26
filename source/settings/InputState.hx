@@ -1,4 +1,4 @@
-package charengine.settings;
+package settings;
 
 import flixel.text.FlxText;
 

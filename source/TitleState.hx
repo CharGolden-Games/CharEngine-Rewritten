@@ -33,11 +33,11 @@ import openfl.net.NetStream;
 import shaderslmfao.BuildingShaders.BuildingShader;
 import shaderslmfao.BuildingShaders;
 import shaderslmfao.ColorSwap;
-//import ui.PreferencesMenu;
+import haxe.Http;
 
 using StringTools;
 
-#if discord_rpc
+#if ALLOW_DISCORD
 import Discord.DiscordClient;
 #end
 #if desktop
@@ -71,6 +71,8 @@ class TitleState extends MusicBeatState
 	public static var volumeUpKeys:Array<FlxKey> = [PLUS, NUMPADPLUS];
 	public static var volumeDownKeys:Array<FlxKey> = [MINUS, NUMPADMINUS];
 	public static var muteKeys:Array<FlxKey> = [ZERO, NUMPADZERO];
+	public static var closedState:Bool = false;
+	public var mustUpdate:Bool = false;
 
 	override public function create():Void
 	{
@@ -149,13 +151,36 @@ class TitleState extends MusicBeatState
 
 		// netConnection.addEventListener(MouseEvent.MOUSE_DOWN, overlay_onMouseDown);
 		#else
+		if (ClientPrefs.data.update && !closedState)
+		{
+			trace("Let's see if you updated >:(");
+
+			var http = new Http("https://raw.githubusercontent.com/CharGoldenYT-TestAccount/CharEngine-Rewritten/refs/heads/Master/gitVersion.txt");
+
+			http.onData = function (data:String)
+			{
+				var updateVersion = (OutdatedSubState.nextVer = data.split('\n')[0].trim());
+				var curVersion:String = MainMenuState.charEngineVersion.trim();
+				trace('version online: ' + updateVersion + ', your version: ' + curVersion);
+				if(updateVersion != curVersion) {
+					trace('versions arent matching!');
+					mustUpdate = true;
+				}
+			}
+
+			http.onError = function (error) {
+				trace('error: $error');
+			}
+
+			http.request();
+		}
 		new FlxTimer().start(1, function(tmr:FlxTimer)
 		{
 			startIntro();
 		});
 		#end
 
-		#if discord_rpc
+		#if ALLOW_DISCORD
 		DiscordClient.initialize();
 
 		Application.current.onExit.add(function(exitCode)
@@ -407,8 +432,11 @@ class TitleState extends MusicBeatState
 			transitioning = true;
 			// FlxG.sound.music.stop();
 
-			
-			FlxG.switchState(new MainMenuState());
+			if (!mustUpdate)
+				FlxG.switchState(new MainMenuState());
+			else
+				FlxG.switchState(new OutdatedSubState());
+			closedState = true;
 			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 		}
 
@@ -443,7 +471,7 @@ class TitleState extends MusicBeatState
 	{
 		for (i in 0...textArray.length)
 		{
-			var money:Alphabet = new Alphabet(0, 0, textArray[i], true, false);
+			var money:Alphabet = new Alphabet(0, 0, textArray[i], true);
 			money.screenCenter(X);
 			money.y += (i * 60) + 200;
 			credGroup.add(money);
@@ -453,7 +481,7 @@ class TitleState extends MusicBeatState
 
 	function addMoreText(text:String)
 	{
-		var coolText:Alphabet = new Alphabet(0, 0, text, true, false);
+		var coolText:Alphabet = new Alphabet(0, 0, text, true);
 		coolText.screenCenter(X);
 		coolText.y += (textGroup.length * 60) + 200;
 		credGroup.add(coolText);

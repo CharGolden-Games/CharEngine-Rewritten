@@ -10,6 +10,11 @@ class SaveVariables
 	public var naughtyness:Bool = true;
 	public var flashing:Bool = true;
 	public var allowCamZoom:Bool = true;
+	public var update:Bool = true;
+	public var ghostTapping:Bool = true;
+	public var playAnimOnGhostTap:Bool = true;
+	public var playInstInFreeplay:Bool = true;
+	public var antialiasing:Bool = true;
 
 	public function new() {} // Required by haxe :D
 }

@@ -49,7 +49,7 @@ import shaderslmfao.ColorSwap;
 
 using StringTools;
 
-#if discord_rpc
+#if ALLOW_DISCORD
 import Discord.DiscordClient;
 #end
 
@@ -156,7 +156,7 @@ class PlayState extends MusicBeatState
 
 	var inCutscene:Bool = false;
 
-	#if discord_rpc
+	#if ALLOW_DISCORD
 	// Discord RPC variables
 	var storyDifficultyText:String = "";
 	var iconRPC:String = "";
@@ -222,7 +222,7 @@ class PlayState extends MusicBeatState
 				dialogue = CoolUtil.coolTextFile(Paths.txt('thorns/thornsDialogue'));
 		}
 
-		#if discord_rpc
+		#if ALLOW_DISCORD
 		initDiscord();
 		#end
 
@@ -1362,8 +1362,8 @@ class PlayState extends MusicBeatState
 
 	function initDiscord():Void
 	{
-		#if discord_rpc
-		storyDifficultyText = difficultyString();
+		#if ALLOW_DISCORD
+		storyDifficultyText = CoolUtil.difficultyString();
 		iconRPC = SONG.player2;
 
 		// To avoid having duplicate images in Discord assets
@@ -1575,7 +1575,7 @@ class PlayState extends MusicBeatState
 		FlxG.sound.music.onComplete = endSong;
 		vocals.play();
 
-		#if discord_rpc
+		#if ALLOW_DISCORD
 		// Song duration in a float, useful for the time left feature
 		songLength = FlxG.sound.music.length;
 
@@ -1821,7 +1821,7 @@ class PlayState extends MusicBeatState
 				startTimer.active = true;
 			paused = false;
 
-			#if discord_rpc
+			#if ALLOW_DISCORD
 			if (startTimer.finished)
 				DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC, true, songLength - Conductor.songPosition);
 			else
@@ -1832,7 +1832,7 @@ class PlayState extends MusicBeatState
 		super.closeSubState();
 	}
 
-	#if discord_rpc
+	#if ALLOW_DISCORD
 	override public function onFocus():Void
 	{
 		if (health > 0 && !paused && FlxG.autoPause)
@@ -1962,7 +1962,7 @@ class PlayState extends MusicBeatState
 				boyfriendPos.put();
 			}
 
-			#if discord_rpc
+			#if ALLOW_DISCORD
 			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 			#end
 		}
@@ -1971,7 +1971,7 @@ class PlayState extends MusicBeatState
 		{
 			FlxG.switchState(new ChartingState());
 
-			#if discord_rpc
+			#if ALLOW_DISCORD
 			DiscordClient.changePresence("Chart Editor", null, null, true);
 			#end
 		}
@@ -2114,7 +2114,7 @@ class PlayState extends MusicBeatState
 
 				// FlxG.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
-				#if discord_rpc
+				#if ALLOW_DISCORD
 				// Game Over doesn't get his own variable because it's only used here
 				DiscordClient.changePresence("Game Over - " + detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 				#end
@@ -2436,7 +2436,7 @@ class PlayState extends MusicBeatState
 	}
 
 	// gives score and pops up rating
-	private function popUpScore(strumtime:Float, daNote:Note):Void
+	private function popUpScore(strumtime:Float, daNote:Note, ?isSus:Bool = false):Void
 	{
 		var noteDiff:Float = Math.abs(strumtime - Conductor.songPosition);
 		// boyfriend.playAnim('hey');
@@ -2444,10 +2444,9 @@ class PlayState extends MusicBeatState
 
 		var rating:FlxSprite = new FlxSprite();
 		var score:Int = 350;
-
 		var daRating:String = "sick";
-
 		var isSick:Bool = false;
+		var addNotesHit:Float = 1;
 
 		// todo: Make the noteDiff refer to an array lmao.
 		if (noteDiff > Conductor.safeZoneOffset * 0.9)
@@ -2467,18 +2466,18 @@ class PlayState extends MusicBeatState
 			case "sick":
 			sicks++;
 			isSick = true;
-			totalNotesHit++;
 			case "good":
 			goods++;
 			score = 200;
-			totalNotesHit += 0.7;
+			addNotesHit = 0.7;
 			case "bad":
 			score = 100;
 			bads++;
-			totalNotesHit += 0.4;
+			addNotesHit = 0.4;
 			case "shit":
 			score = 50;
 			shits++;
+			addNotesHit = 0;
 		}
 
 		if (isSick)
@@ -2488,6 +2487,12 @@ class PlayState extends MusicBeatState
 			// new NoteSplash(daNote.x, daNote.y, daNote.noteData);
 			grpNoteSplashes.add(noteSplash);
 		}
+		if (isSus)
+		{
+			totalNotesHit++;
+			return;
+		}
+		totalNotesHit += addNotesHit;
 
 		// Only add the score if you're not on practice mode
 		if (!practiceMode)
@@ -2781,7 +2786,7 @@ class PlayState extends MusicBeatState
 			{
 				for (shit in 0...pressArray.length)
 					if (pressArray[shit])
-						noteMiss(shit);
+						noteMiss(shit, ClientPrefs.data.ghostTapping);
 			}
 		}
 
@@ -2811,17 +2816,20 @@ class PlayState extends MusicBeatState
 		});
 	}
 
-	function noteMiss(direction:Int = 1):Void
+	function noteMiss(direction:Int = 1, ?noPenalty:Bool = false):Void
 	{
 		// whole function used to be encased in if (!boyfriend.stunned)
-		health -= 0.04;
-		killCombo();
+		if (!noPenalty)
+		{
+			health -= 0.04;
+			killCombo();
 
-		if (!practiceMode)
-			songScore -= 10;
+			if (!practiceMode)
+				songScore -= 10;
 
-		vocals.volume = 0;
-		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
+			vocals.volume = 0;
+			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
+		}
 
 		/* boyfriend.stunned = true;
 
@@ -2831,16 +2839,33 @@ class PlayState extends MusicBeatState
 			boyfriend.stunned = false;
 		}); */
 
-		switch (direction)
+		if (!noPenalty)
 		{
-			case 0:
-				boyfriend.playAnim('singLEFTmiss', true);
-			case 1:
-				boyfriend.playAnim('singDOWNmiss', true);
-			case 2:
-				boyfriend.playAnim('singUPmiss', true);
-			case 3:
-				boyfriend.playAnim('singRIGHTmiss', true);
+			switch (direction)
+			{
+				case 0:
+					boyfriend.playAnim('singLEFTmiss', true);
+				case 1:
+					boyfriend.playAnim('singDOWNmiss', true);
+				case 2:
+					boyfriend.playAnim('singUPmiss', true);
+				case 3:
+					boyfriend.playAnim('singRIGHTmiss', true);
+			}
+		}
+		else if (ClientPrefs.data.playAnimOnGhostTap)
+		{
+			switch (direction)
+			{
+				case 0:
+					boyfriend.playAnim('singLEFT', true);
+				case 1:
+					boyfriend.playAnim('singDOWN', true);
+				case 2:
+					boyfriend.playAnim('singUP', true);
+				case 3:
+					boyfriend.playAnim('singRIGHT', true);
+			}
 		}
 	}
 
@@ -2869,12 +2894,12 @@ class PlayState extends MusicBeatState
 	{
 		if (!note.wasGoodHit)
 		{
-			totalPlayed++;
 			if (!note.isSustainNote)
 			{
 				combo += 1;
-				popUpScore(note.strumTime, note);
 			}
+			popUpScore(note.strumTime, note, note.isSustainNote);
+			totalPlayed++;
 
 			if (note.noteData >= 0)
 				health += 0.023;

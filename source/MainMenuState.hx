@@ -17,6 +17,7 @@ using StringTools;
 
 class MainMenuState extends MusicBeatState
 {
+	public static var charEngineVersion:String = '0.1';
 	var curSelected:Int = 0;
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
@@ -28,20 +29,16 @@ class MainMenuState extends MusicBeatState
 
 	override function create()
 	{
-		trace("1");
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
 
-		trace("Music Test");
 		if (!FlxG.sound.music.playing)
 		{
 			FlxG.sound.playMusic(Paths.music("freakyMenu"));
 		}
-		trace("If you see this I won!");
 
 		persistentUpdate = persistentDraw = true;
 
-		trace("2");
 		var bg:FlxSprite = new FlxSprite(-80).loadGraphic('assets/images/menuBG.png');
 		bg.scrollFactor.x = 0;
 		bg.scrollFactor.y = 0.18;
@@ -51,11 +48,9 @@ class MainMenuState extends MusicBeatState
 		bg.antialiasing = true;
 		add(bg);
 
-		trace("3");
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
 
-		trace("4");
 		magenta = new FlxSprite(-80).loadGraphic('assets/images/menuDesat.png');
 		magenta.scrollFactor.x = 0;
 		magenta.scrollFactor.y = 0.18;
@@ -68,7 +63,6 @@ class MainMenuState extends MusicBeatState
 		add(magenta);
 		// magenta.scrollFactor.set();
 
-		trace(5);
 		menuItems = new FlxTypedGroup<FlxSprite>();
 		add(menuItems);
 
@@ -94,7 +88,7 @@ class MainMenuState extends MusicBeatState
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
-		var versionShit:FlxText = new FlxText(5, FlxG.height - 38, 0, "Char Engine V0.1", 12);
+		var versionShit:FlxText = new FlxText(5, FlxG.height - 38, 0, "Char Engine V" + charEngineVersion, 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
@@ -160,6 +154,9 @@ class MainMenuState extends MusicBeatState
 			case 'freeplay':
 				selectedSomethin = true;
 				FlxG.switchState(new FreeplayState());
+			case 'options':
+				selectedSomethin = true;
+				FlxG.switchState(new settings.SettingState());
 		}
 	}
 
