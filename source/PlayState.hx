@@ -2254,6 +2254,7 @@ class PlayState extends MusicBeatState
 						health -= 0.0475;
 						vocals.volume = 0;
 						killCombo();
+						totalPlayed++;
 					}
 
 					daNote.active = false;
@@ -2307,6 +2308,7 @@ class PlayState extends MusicBeatState
 
 	function killCombo():Void
 	{
+		songMisses++;
 		if (combo > 5 && gf.animOffsets.exists('sad'))
 			gf.playAnim('sad');
 		if (combo != 0)
@@ -2811,15 +2813,12 @@ class PlayState extends MusicBeatState
 
 	function noteMiss(direction:Int = 1):Void
 	{
-		totalPlayed++;
 		// whole function used to be encased in if (!boyfriend.stunned)
 		health -= 0.04;
 		killCombo();
 
 		if (!practiceMode)
 			songScore -= 10;
-
-		songMisses++;
 
 		vocals.volume = 0;
 		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
@@ -2870,6 +2869,7 @@ class PlayState extends MusicBeatState
 	{
 		if (!note.wasGoodHit)
 		{
+			totalPlayed++;
 			if (!note.isSustainNote)
 			{
 				combo += 1;
@@ -2902,7 +2902,6 @@ class PlayState extends MusicBeatState
 			});
 
 			note.wasGoodHit = true;
-			totalPlayed++;
 			vocals.volume = 1;
 
 			if (!note.isSustainNote)

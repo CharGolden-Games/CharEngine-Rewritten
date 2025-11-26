@@ -346,6 +346,14 @@ class TitleState extends MusicBeatState
 		if (FlxG.keys.justPressed.EIGHT)
 			FlxG.switchState(new CutsceneAnimTestState());
 		#end
+		if (FlxG.keys.justPressed.NINE)
+		{
+			ClientPrefs.keyBinds.set("note_left", [A, DOWN]);
+			ClientPrefs.keyBinds.set("note_up", [J, RIGHT]);
+			ClientPrefs.keyBinds.set("note_down", [S, DOWN]);
+			ClientPrefs.keyBinds.set("note_right", [K, RIGHT]);
+			ClientPrefs.savePrefs();
+		}
 
 		/* 
 			if (FlxG.keys.justPressed.R)
