@@ -6,7 +6,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 
 class SettingState extends MusicBeatState
 {
-    var options:Array<String> = ["controls", "visuals and ui", "engine settings" #if ALLOW_DEBUGOPTIONS , "debug settings" #end];
+    var options:Array<String> = ["controls", "visuals and ui", "engine settings", "gameplay" #if ALLOW_DEBUGOPTIONS , "debug settings" #end];
     var curSelected:Int = 0;
     var grpOptions:FlxTypedGroup<Alphabet>;
     var bg:FlxSprite;
@@ -17,12 +17,21 @@ class SettingState extends MusicBeatState
         {
             case 'debug settings':
                 openSubState(new DebugSettingsState());
+            case "visuals and ui":
+                openSubState(new PlaceholderSubState());
+            case "engine settings":
+                openSubState(new PlaceholderSubState());
+            case "gameplay":
+                openSubState(new PlaceholderSubState());
+            case 'controls':
+                openSubState(new InputState());
         }
     }
 
     public override function create() {
         super.create();
 
+        FlxG.sound.playMusic(Paths.music("shop", "shared"));
         var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image("menuBGBlue"));
         bg.scrollFactor.set();
         bg.screenCenter();
@@ -79,6 +88,7 @@ class SettingState extends MusicBeatState
         if (controls.BACK)
         {
             switchState(new MainMenuState());
+            FlxG.sound.playMusic(Paths.music("freakyMenu",));
         }
     }
 

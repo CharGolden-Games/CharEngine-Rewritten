@@ -125,8 +125,7 @@
 	<haxelib name="flixel-ui" />
 	<!--haxelib name="newgrounds" unless="switch"/> -->
 	<haxelib name="faxe" if='switch'/>
-	<haxelib name="polymod" if="ALLOW_POLYMOD"/>
-	<haxelib name="newgrounds" if="ALLOW_NEWGROUNDS"/>
+	<!-- <haxelib name="polymod" if="ALLOW_POLYMOD"/> --> <!-- Don't enable this if you don't know what you're doing! -->
 	<haxelib name="hxcpp-debug-server" if="desktop debug"/>
 	<haxelib name="discord_rpc" if="desktop" />
 	

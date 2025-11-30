@@ -15,6 +15,7 @@ class SaveVariables
 	public var playAnimOnGhostTap:Bool = true;
 	public var playInstInFreeplay:Bool = true;
 	public var antialiasing:Bool = true;
+	public var preferHardcodedChars:Bool = false;
 
 	public function new() {} // Required by haxe :D
 }
@@ -100,6 +101,33 @@ class ClientPrefs
 		}
 
 		reloadBinds();
+	}
+
+	public static function resetKeys(controller:Null<Bool> = null) //Null = both, False = Keyboard, True = Controller
+	{
+		if(controller != true)
+			for (key in keyBinds.keys())
+				if(defaultBinds.exists(key))
+					keyBinds.set(key, defaultBinds.get(key).copy());
+
+		if(controller != false)
+			for (button in gamepadBinds.keys())
+				if(defaultGamepadBinds.exists(button))
+					gamepadBinds.set(button, defaultGamepadBinds.get(button).copy());
+	}
+
+	public static function clearInvalidKeys(key:String)
+	{
+		var keyBind:Array<FlxKey> = keyBinds.get(key);
+		var gamepadBind:Array<FlxGamepadInputID> = gamepadBinds.get(key);
+		while(keyBind != null && keyBind.contains(NONE)) keyBind.remove(NONE);
+		while(gamepadBind != null && gamepadBind.contains(NONE)) gamepadBind.remove(NONE);
+	}
+
+	public static function loadDefaultkeys()
+	{
+		defaultBinds = keyBinds.copy();
+		defaultGamepadBinds = gamepadBinds.copy();
 	}
 
 	public static function reloadBinds()

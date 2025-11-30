@@ -1,5 +1,7 @@
 package;
 
+import haxe.Json;
+import openfl.utils.Assets;
 import flixel.util.FlxColor;
 import Section.SwagSection;
 import flixel.FlxG;
@@ -8,8 +10,45 @@ import flixel.animation.FlxBaseAnimation;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.util.FlxSort;
 import haxe.io.Path;
+#if sys
+import sys.io.File;
+import sys.FileSystem;
+#end
 
 using StringTools;
+
+typedef CharacterFile = {
+	var animations:Array<AnimArray>;
+	var image:String;
+	var scale:Float;
+	var sing_duration:Float;
+	var healthicon:String;
+	var iconAnim:AnimIcon;
+
+	var position:Array<Float>;
+	var camera_position:Array<Float>;
+
+	var flip_x:Bool;
+	var no_antialiasing:Bool;
+	var healthbar_colors:Array<Int>;
+}
+
+typedef AnimIcon = {
+	var normal:AnimArray;
+	var losing:AnimArray;
+	@:optional var winning:AnimArray;
+	@:optional var extraAnims:Array<AnimArray>;
+}
+
+typedef AnimArray = {
+	var anim:String;
+	var name:String;
+	var fps:Int;
+	var loop:Bool;
+	var indices:Array<Int>;
+	var offsets:Array<Int>;
+	@:optional var offsets_opponent:Array<Int>;
+}
 
 class Character extends FlxSprite
 {
@@ -19,6 +58,12 @@ class Character extends FlxSprite
 	public var isPlayer:Bool = false;
 	public var curCharacter:String = 'bf';
 	public var healthbarColor:FlxColor = 0xFFFF0000;
+	public var isHardcoded:Bool = true;
+	public var imageFile:String = '';
+	public var pos:Array<Float> = [];
+	public var offsets_opp:Map<String, Array<Dynamic>>;
+	public var healthicon:String = 'bf';
+	public var animArray:Array<AnimArray> = [];
 
 	public var holdTimer:Float = 0;
 
@@ -491,6 +536,14 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 				flipX = true;
+
+			default:
+				isHardcoded = false;
+		}
+		if (!ClientPrefs.data.preferHardcodedChars || !isHardcoded)
+		{
+			//loadCharFile(character);
+			trace("This would have loaded a character");
 		}
 
 		dance();
@@ -517,6 +570,87 @@ class Character extends FlxSprite
 				}
 			}
 		}
+	}
+
+	function loadCharFile(?char:String = 'bf')
+	{
+		if (curCharacter != char) curCharacter = char;
+		var characterPath = "characters/" + curCharacter + '.json';
+
+		var path = 'assets/$characterPath'; // TODO: When adding mod support change this to check for mod folders first.
+
+		if (!FileSystem.exists(path))
+		{
+			loadDefaultChar();
+			return;
+		}
+
+		#if sys
+			var rawJson = File.getContent(path);
+		#else
+			var rawJson = Assets.getText(path);
+		#end
+
+		var json:CharacterFile = cast Json.parse(rawJson);
+		var spriteType:String = "sparrow";
+
+		if (Assets.exists(Paths.getLibraryPath('images/${json.image}.txt', "shared")))
+		{
+			spriteType = "packer";
+		}
+
+		if (Assets.exists(Paths.getLibraryPath('images/${json.image}.json', "shared")))
+		{
+			spriteType = "texture";
+		}
+
+		switch (spriteType)
+		{
+			case 'sparrow': frames = Paths.getSparrowAtlas(json.image);
+			case 'packer': frames = Paths.getPackerAtlas(json.image);
+			case 'texture': trace("FUCK, I CANT PARSE A TEXTURE ATLAS :(");
+		}
+		imageFile = json.image;
+		pos = json.position;
+		healthicon = json.healthicon;
+		healthbarColor = FlxColor.fromRGB(json.healthbar_colors[0], json.healthbar_colors[1], json.healthbar_colors[2]);
+		if (!ClientPrefs.data.antialiasing || json.no_antialiasing) antialiasing = false; else antialiasing = true;
+		animArray = json.animations;
+		for (anim in animArray)
+		{
+			// TODO: make quick anim add better.
+			quickAnimAdd(anim.anim, anim.name);
+		}
+	}
+
+	function loadDefaultChar()
+	{
+				var tex = Paths.getSparrowAtlas('characters/BOYFRIEND');
+				frames = tex;
+				quickAnimAdd('idle', 'BF idle dance');
+				quickAnimAdd('singUP', 'BF NOTE UP0');
+				quickAnimAdd('singLEFT', 'BF NOTE LEFT0');
+				quickAnimAdd('singRIGHT', 'BF NOTE RIGHT0');
+				quickAnimAdd('singDOWN', 'BF NOTE DOWN0');
+				quickAnimAdd('singUPmiss', 'BF NOTE UP MISS');
+				quickAnimAdd('singLEFTmiss', 'BF NOTE LEFT MISS');
+				quickAnimAdd('singRIGHTmiss', 'BF NOTE RIGHT MISS');
+				quickAnimAdd('singDOWNmiss', 'BF NOTE DOWN MISS');
+				quickAnimAdd('hey', 'BF HEY');
+
+				quickAnimAdd('firstDeath', "BF dies");
+				animation.addByPrefix('deathLoop', "BF Dead Loop", 24, true);
+				quickAnimAdd('deathConfirm', "BF Dead confirm");
+
+				animation.addByPrefix('scared', 'BF idle shaking', 24, true);
+
+				loadOffsetFile(curCharacter);
+
+				playAnim('idle');
+
+				flipX = true;
+
+				loadOffsetFile(curCharacter);
 	}
 
 	public function loadMappedAnims()
