@@ -1,21 +1,20 @@
 package;
 
 import Sys.sleep;
+import discord_rpc.DiscordRpc;
 
 using StringTools;
 
-#if discord_rpc
-import discord_rpc.DiscordRpc;
-#end
-
 class DiscordClient
 {
-	#if discord_rpc
+	#if ALLOW_DISCORD
+	public static var token:String = "1443042878732374228";
+
 	public function new()
 	{
 		trace("Discord Client starting...");
 		DiscordRpc.start({
-			clientID: "814588678700924999",
+			clientID: token,
 			onReady: onReady,
 			onError: onError,
 			onDisconnected: onDisconnected

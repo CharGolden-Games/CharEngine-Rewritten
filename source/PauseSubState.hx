@@ -1,6 +1,6 @@
 package;
 
-import Controls.Control;
+import Controls;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
@@ -109,7 +109,7 @@ class PauseSubState extends MusicBeatSubstate
 
 		for (i in 0...menuItems.length)
 		{
-			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, menuItems[i], true, false);
+			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, menuItems[i], true);
 			songText.isMenuItem = true;
 			songText.targetY = i;
 			grpMenuShit.add(songText);
@@ -180,7 +180,7 @@ class PauseSubState extends MusicBeatSubstate
 		if (FlxG.keys.justPressed.J)
 		{
 			// for reference later!
-			// PlayerSettings.player1.controls.replaceBinding(Control.LEFT, Keys, FlxKey.J, null);
+			// Controls.instance.replaceBinding(Control.LEFT, Keys, FlxKey.J, null);
 		}
 	}
 

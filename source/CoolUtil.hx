@@ -21,6 +21,12 @@ class CoolUtil
 	{
 		return difficultyArray[PlayState.storyDifficulty];
 	}
+	inline public static function capitalize(text:String)
+		return text.charAt(0).toUpperCase() + text.substr(1).toLowerCase();
+
+	inline public static function boundTo(value:Float, min:Float, max:Float):Float {
+		return Math.max(min, Math.min(max, value));
+	}
 
 	public static function coolTextFile(path:String):Array<String>
 	{

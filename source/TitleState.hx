@@ -1,5 +1,6 @@
 package;
 
+import flixel.input.keyboard.FlxKey;
 import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.FlxSprite;
@@ -32,11 +33,11 @@ import openfl.net.NetStream;
 import shaderslmfao.BuildingShaders.BuildingShader;
 import shaderslmfao.BuildingShaders;
 import shaderslmfao.ColorSwap;
-import ui.PreferencesMenu;
+import haxe.Http;
 
 using StringTools;
 
-#if discord_rpc
+#if ALLOW_DISCORD
 import Discord.DiscordClient;
 #end
 #if desktop
@@ -67,13 +68,19 @@ class TitleState extends MusicBeatState
 	var netStream:NetStream;
 	private var overlay:Sprite;
 
+	public static var volumeUpKeys:Array<FlxKey> = [PLUS, NUMPADPLUS];
+	public static var volumeDownKeys:Array<FlxKey> = [MINUS, NUMPADMINUS];
+	public static var muteKeys:Array<FlxKey> = [ZERO, NUMPADZERO];
+	public static var closedState:Bool = false;
+	public var mustUpdate:Bool = false;
+
 	override public function create():Void
 	{
-		#if polymod
-		polymod.Polymod.init({modRoot: "mods", dirs: ['introMod'], framework: OPENFL});
-		// FlxG.bitmap.clearCache();
-		#end
-
+        FlxG.sound.playMusic(Paths.music("freakyMenu"), 0); // crash fix
+		FlxG.sound.music.stop();
+		FlxG.save.bind('funkin', 'CharGoldenGames');
+		ClientPrefs.loadPrefs();
+		Highscore.load();
 		startedIntro = false;
 
 		FlxG.game.focusLostFramerate = 60;
@@ -81,22 +88,11 @@ class TitleState extends MusicBeatState
 		swagShader = new ColorSwap();
 		alphaShader = new BuildingShaders();
 
-		FlxG.sound.muteKeys = [ZERO];
-
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 
 		// DEBUG BULLSHIT
 
 		super.create();
-
-		FlxG.save.bind('funkin', 'ninjamuffin99');
-		PreferencesMenu.initPrefs();
-		PlayerSettings.init();
-		Highscore.load();
-
-		#if newgrounds
-		NGio.init();
-		#end
 
 		if (FlxG.save.data.weekUnlocked != null)
 		{
@@ -155,13 +151,36 @@ class TitleState extends MusicBeatState
 
 		// netConnection.addEventListener(MouseEvent.MOUSE_DOWN, overlay_onMouseDown);
 		#else
+		if (ClientPrefs.data.update && !closedState)
+		{
+			trace("Let's see if you updated >:(");
+
+			var http = new Http("https://raw.githubusercontent.com/CharGoldenYT-TestAccount/CharEngine-Rewritten/refs/heads/Master/gitVersion.txt");
+
+			http.onData = function (data:String)
+			{
+				var updateVersion = (OutdatedSubState.nextVer = data.split('\n')[0].trim());
+				var curVersion:String = MainMenuState.charEngineVersion.trim();
+				trace('version online: ' + updateVersion + ', your version: ' + curVersion);
+				if(updateVersion != curVersion) {
+					trace('versions arent matching!');
+					mustUpdate = true;
+				}
+			}
+
+			http.onError = function (error) {
+				trace('error: $error');
+			}
+
+			http.request();
+		}
 		new FlxTimer().start(1, function(tmr:FlxTimer)
 		{
 			startIntro();
 		});
 		#end
 
-		#if discord_rpc
+		#if ALLOW_DISCORD
 		DiscordClient.initialize();
 
 		Application.current.onExit.add(function(exitCode)
@@ -352,6 +371,14 @@ class TitleState extends MusicBeatState
 		if (FlxG.keys.justPressed.EIGHT)
 			FlxG.switchState(new CutsceneAnimTestState());
 		#end
+		if (FlxG.keys.justPressed.NINE)
+		{
+			ClientPrefs.keyBinds.set("note_left", [A, DOWN]);
+			ClientPrefs.keyBinds.set("note_up", [J, RIGHT]);
+			ClientPrefs.keyBinds.set("note_down", [S, DOWN]);
+			ClientPrefs.keyBinds.set("note_right", [K, RIGHT]);
+			ClientPrefs.savePrefs();
+		}
 
 		/* 
 			if (FlxG.keys.justPressed.R)
@@ -396,14 +423,6 @@ class TitleState extends MusicBeatState
 
 		if (pressedEnter && !transitioning && skippedIntro)
 		{
-			if (FlxG.sound.music != null)
-				FlxG.sound.music.onComplete = null;
-			// netStream.play(Paths.file('music/kickstarterTrailer.mp4'));
-			NGio.unlockMedal(60960);
-
-			// If it's Friday according to da clock
-			if (Date.now().getDay() == 5)
-				NGio.unlockMedal(61034);
 
 			titleText.animation.play('press');
 
@@ -413,33 +432,11 @@ class TitleState extends MusicBeatState
 			transitioning = true;
 			// FlxG.sound.music.stop();
 
-			#if newgrounds
-			if (!OutdatedSubState.leftState)
-			{
-				NGio.checkVersion(function(version)
-				{
-					// Check if version is outdated
-
-					var localVersion:String = "v" + Application.current.meta.get('version');
-					var onlineVersion = version.split(" ")[0].trim();
-
-					if (version.trim() != onlineVersion)
-					{
-						trace('OLD VERSION!');
-						// FlxG.switchState(new OutdatedSubState());
-					}
-					else
-					{
-						// FlxG.switchState(new MainMenuState());
-					}
-
-					// REDO FOR ITCH/FINAL SHIT
-					FlxG.switchState(new MainMenuState());
-				});
-			}
-			#else
-			FlxG.switchState(new MainMenuState());
-			#end
+			if (!mustUpdate)
+				FlxG.switchState(new MainMenuState());
+			else
+				FlxG.switchState(new OutdatedSubState());
+			closedState = true;
 			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 		}
 
@@ -461,10 +458,10 @@ class TitleState extends MusicBeatState
 		// if (FlxG.keys.justPressed.SPACE)
 		// swagShader.hasOutline = !swagShader.hasOutline;
 
-		if (controls.UI_LEFT)
+		if (FlxG.keys.justPressed.LEFT)
 			swagShader.update(-elapsed * 0.1);
 
-		if (controls.UI_RIGHT)
+		if (FlxG.keys.justPressed.RIGHT)
 			swagShader.update(elapsed * 0.1);
 
 		super.update(elapsed);
@@ -474,7 +471,7 @@ class TitleState extends MusicBeatState
 	{
 		for (i in 0...textArray.length)
 		{
-			var money:Alphabet = new Alphabet(0, 0, textArray[i], true, false);
+			var money:Alphabet = new Alphabet(0, 0, textArray[i], true);
 			money.screenCenter(X);
 			money.y += (i * 60) + 200;
 			credGroup.add(money);
@@ -484,7 +481,7 @@ class TitleState extends MusicBeatState
 
 	function addMoreText(text:String)
 	{
-		var coolText:Alphabet = new Alphabet(0, 0, text, true, false);
+		var coolText:Alphabet = new Alphabet(0, 0, text, true);
 		coolText.screenCenter(X);
 		coolText.y += (textGroup.length * 60) + 200;
 		credGroup.add(coolText);

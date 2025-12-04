@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxState;
 import Conductor.BPMChangeEvent;
 import flixel.FlxG;
 import flixel.FlxGame;
@@ -15,13 +16,10 @@ class MusicBeatState extends FlxUIState
 	private var controls(get, never):Controls;
 
 	inline function get_controls():Controls
-		return PlayerSettings.player1.controls;
+		return Controls.instance;
 
 	override function create()
 	{
-		if (transIn != null)
-			trace('reg ' + transIn.region);
-
 		super.create();
 	}
 
@@ -69,5 +67,10 @@ class MusicBeatState extends FlxUIState
 	public function beatHit():Void
 	{
 		// do literally nothing dumbass
+	}
+
+	public function switchState(s:FlxState)
+	{
+		FlxG.switchState(s);
 	}
 }
