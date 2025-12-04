@@ -540,10 +540,10 @@ class Character extends FlxSprite
 			default:
 				isHardcoded = false;
 		}
-		if (!ClientPrefs.data.preferHardcodedChars || !isHardcoded)
+		if (!ClientPrefs.data.preferHardcodedChars) isHardcoded = false;
+		if (!isHardcoded)
 		{
-			//loadCharFile(character);
-			trace("This would have loaded a character");
+			loadCharFile(character);
 		}
 
 		dance();
@@ -554,7 +554,7 @@ class Character extends FlxSprite
 			flipX = !flipX;
 
 			// Doesn't flip for BF, since his are already in the right place???
-			if (!curCharacter.startsWith('bf'))
+			/* if (!curCharacter.startsWith('bf'))
 			{
 				// var animArray
 				var oldRight = animation.getByName('singRIGHT').frames;
@@ -568,7 +568,7 @@ class Character extends FlxSprite
 					animation.getByName('singRIGHTmiss').frames = animation.getByName('singLEFTmiss').frames;
 					animation.getByName('singLEFTmiss').frames = oldMiss;
 				}
-			}
+			} */
 		}
 	}
 
@@ -616,10 +616,26 @@ class Character extends FlxSprite
 		healthbarColor = FlxColor.fromRGB(json.healthbar_colors[0], json.healthbar_colors[1], json.healthbar_colors[2]);
 		if (!ClientPrefs.data.antialiasing || json.no_antialiasing) antialiasing = false; else antialiasing = true;
 		animArray = json.animations;
-		for (anim in animArray)
-		{
-			// TODO: make quick anim add better.
-			quickAnimAdd(anim.anim, anim.name);
+		// Credit to psych engine because I cannot be bothered to figure this out.
+		if(animArray != null && animArray.length > 0) {
+			for (anim in animArray) {
+				var animAnim:String = '' + anim.anim;
+				var animName:String = '' + anim.name;
+				var animFps:Int = anim.fps;
+				var animLoop:Bool = !!anim.loop; //Bruh
+				var animIndices:Array<Int> = anim.indices;
+				if(animIndices != null && animIndices.length > 0) {
+					animation.addByIndices(animAnim, animName, animIndices, "", animFps, animLoop);
+				} else {
+					animation.addByPrefix(animAnim, animName, animFps, animLoop);
+				}
+
+				if(anim.offsets != null && anim.offsets.length > 1) {
+					addOffset(anim.anim, anim.offsets[0], anim.offsets[1]);
+				}
+			}
+		} else {
+			quickAnimAdd('idle', 'BF idle dance');
 		}
 	}
 
@@ -764,36 +780,54 @@ class Character extends FlxSprite
 	{
 		if (!debugMode)
 		{
-			switch (curCharacter)
+			if (isHardcoded)
 			{
-				case 'gf' | 'gf-christmas' | 'gf-car' | 'gf-pixel' | 'gf-tankmen':
-					if (!animation.curAnim.name.startsWith('hair'))
-					{
+				switch (curCharacter)
+				{
+					case 'gf' | 'gf-christmas' | 'gf-car' | 'gf-pixel' | 'gf-tankmen':
+						if (!animation.curAnim.name.startsWith('hair'))
+						{
+							danced = !danced;
+
+							if (danced)
+								playAnim('danceRight');
+							else
+								playAnim('danceLeft');
+						}
+
+					case 'pico-speaker':
+					// lol weed
+					// playAnim('shoot' + FlxG.random.int(1, 4), true);
+
+					case 'tankman':
+						if (!animation.curAnim.name.endsWith('DOWN-alt'))
+							playAnim('idle');
+
+					case 'spooky':
 						danced = !danced;
 
 						if (danced)
 							playAnim('danceRight');
 						else
 							playAnim('danceLeft');
-					}
-
-				case 'pico-speaker':
-				// lol weed
-				// playAnim('shoot' + FlxG.random.int(1, 4), true);
-
-				case 'tankman':
-					if (!animation.curAnim.name.endsWith('DOWN-alt'))
+					default:
 						playAnim('idle');
-
-				case 'spooky':
+				}
+			}
+			else
+			{
+				if (animation.exists("danceRight") && animation.exists("danceLeft"))
+				{
 					danced = !danced;
-
 					if (danced)
-						playAnim('danceRight');
-					else
-						playAnim('danceLeft');
-				default:
+							playAnim('danceRight');
+						else
+							playAnim('danceLeft');
+				}
+				else
+				{
 					playAnim('idle');
+				}
 			}
 		}
 	}

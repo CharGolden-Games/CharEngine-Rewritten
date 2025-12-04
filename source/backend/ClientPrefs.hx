@@ -16,6 +16,7 @@ class SaveVariables
 	public var playInstInFreeplay:Bool = true;
 	public var antialiasing:Bool = true;
 	public var preferHardcodedChars:Bool = false;
+	public var classicHBLayering:Bool = false; // Whether the Healthbar's background should be behind (Base Funkin') or in front of (Psych/Codename) the actual bar.
 
 	public function new() {} // Required by haxe :D
 }
