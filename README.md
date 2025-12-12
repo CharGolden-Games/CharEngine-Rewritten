@@ -32,8 +32,8 @@ Have you played Friday Night Funkin' before? It's that.
 		If you've used Notetypes in other engines, this is just that.
 	
 	- ## Specialty Notes - Ghost Tap Note
-		> [!NOTE]
-		> Ghost Tapping MUST be enabled for this note to function
+> [!NOTE]
+> Ghost Tapping MUST be enabled for this note to function
 
 		| Player  | Opponent/Botplay |
 		| ------ | -------- |
