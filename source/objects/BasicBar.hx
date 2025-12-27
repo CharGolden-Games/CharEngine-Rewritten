@@ -36,7 +36,8 @@ class BasicBar extends FlxSpriteGroup
 {
     public var baseBar:FlxBar; // expose the healthbar for external stuff.
     public var barBG:FlxSprite;
-    var tracker:Float = 0;
+    public var tracker:Float = 0;
+    public var percent(get, null):Float;
     var percentFunc:Void->Float = null;
     public var range:FloatRange = new FloatRange(0, 2);
     var barDirection:FlxBarFillDirection = RIGHT_TO_LEFT;
@@ -79,10 +80,12 @@ class BasicBar extends FlxSpriteGroup
         return maxBarRatio = ratio;
     }
 
+    function get_percent():Float return tracker;
+
     override function update(elapsed:Float) {
         super.update(elapsed);
 
-        tracker = percentFunc();
+        if (percentFunc != null) tracker = percentFunc();
     }
 
     public function changeColor(empty:FlxColor, fill:FlxColor)

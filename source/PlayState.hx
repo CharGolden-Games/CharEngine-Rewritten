@@ -838,7 +838,6 @@ class PlayState extends MusicBeatState
 			'health', 0, 2);
 		healthBar.scrollFactor.set();
 		getHealthbarColors();
-		// healthBar
 		add(healthBar);
 
 		scoreTxt = new FlxText(healthBarBG.x, healthBarBG.y + 40, healthBarBG.width, 'Score: 0', 20);
@@ -2306,9 +2305,9 @@ class PlayState extends MusicBeatState
 		scoreTxt.text = 'Score: $songScore | Messed up $songMisses times | Accuracy: ${floorDecimal(ratingPercent * 100, 2)}% [$ratingFC]\nRating: Unimplemented';
 	}
 
-	function killCombo():Void
+	function killCombo(?doMiss:Bool = true):Void
 	{
-		songMisses++;
+		if (doMiss) songMisses++;
 		if (combo > 5 && gf.animOffsets.exists('sad'))
 			gf.playAnim('sad');
 		if (combo != 0)
@@ -2447,6 +2446,8 @@ class PlayState extends MusicBeatState
 		var daRating:String = "sick";
 		var isSick:Bool = false;
 		var addNotesHit:Float = 1;
+		var killedCombo:Bool = true;
+		if (!ClientPrefs.data.bsKillCombo) killedCombo = false;
 
 		// todo: Make the noteDiff refer to an array lmao.
 		if (noteDiff > Conductor.safeZoneOffset * 0.9)
@@ -2466,10 +2467,12 @@ class PlayState extends MusicBeatState
 			case "sick":
 			sicks++;
 			isSick = true;
+			killedCombo = false;
 			case "good":
 			goods++;
 			score = 200;
 			addNotesHit = 0.7;
+			killedCombo = false;
 			case "bad":
 			score = 100;
 			bads++;
@@ -2545,6 +2548,7 @@ class PlayState extends MusicBeatState
 			},
 			startDelay: Conductor.crochet * 0.001
 		});
+		if (killedCombo) killCombo(false);
 		if (combo >= 10 || combo == 0)
 			displayCombo();
 	}
