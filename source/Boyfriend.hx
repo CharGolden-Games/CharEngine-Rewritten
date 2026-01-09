@@ -14,8 +14,6 @@ class Boyfriend extends Character
 	public function new(x:Float, y:Float, ?char:String = 'bf')
 	{
 		super(x, y, char, true);
-
-		if (char.startsWith('bf')) healthbarColor = 0xFF22AADD;
 	}
 
 	public var startedDeath:Bool = false;

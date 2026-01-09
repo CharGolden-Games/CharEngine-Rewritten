@@ -34,6 +34,7 @@ class Option
 
 	public var defaultKeys:Keybind = null; //Only used in keybind type
 	public var keys:Keybind = null; //Only used in keybind typepublic function new(name:String, description:String = '', variable:String, type:String = 'bool', ?options:Array<String> = null)
+	public var skip:Bool = false;
 	public function new(name:String, description:String = '', variable:String, type:String = 'bool', ?options:Array<String> = null)
 	{
 		this.name = name;
@@ -67,6 +68,10 @@ class Option
 				defaultValue = '';
 				defaultKeys = {gamepad: 'NONE', keyboard: 'NONE'};
 				keys = {gamepad: 'NONE', keyboard: 'NONE'};
+			case "header":
+				skip = true;
+				if(defaultValue == null) defaultValue = false;
+				type = "bool";
 		}
 
 		try

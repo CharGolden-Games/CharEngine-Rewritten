@@ -18,6 +18,7 @@ class SaveVariables
 	public var preferHardcodedChars:Bool = false;
 	public var bsKillCombo:Bool = false; // Whether bads/shits kill combo.
 	public var classicHBLayering:Bool = false; // Whether the Healthbar's background should be behind (Base Funkin') or in front of (Psych/Codename) the actual bar.
+	public var placeholder:Bool = false; // DO NOT REMOVE.
 
 	public function new() {} // Required by haxe :D
 }

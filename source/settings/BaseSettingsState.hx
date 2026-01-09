@@ -13,10 +13,10 @@ import backend.InputFormatter;
 
 class BaseSettingsState extends MusicBeatSubstate
 {
-    var bg:FlxSprite;
+	var bg:FlxSprite;
 
-    var options:Array<Option>;
     var vars:Array<SettingData>;
+	var options:Array<Option>;
 
     var grpOptions:FlxTypedGroup<Alphabet>;
     var grpCheckboxes:FlxTypedGroup<Checkbox>;
@@ -31,17 +31,17 @@ class BaseSettingsState extends MusicBeatSubstate
     var title:String; // This is used to tell ya which setting screen you're on + for DiscordRPC.
     var watermark:String;
 
-    public function new()
-    {
-        super();
-        if (title == null) title = "Options";
+	public function new()
+	{
+		super();
+		if (title == null) title = "Options";
 
-        #if ALLOW_DISCORD
-        DiscordClient.changePresence(title, null);
-        #end
-		
-		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		bg.color = 0xFFea71fd;
+		#if ALLOW_DISCORD
+		DiscordClient.changePresence(title, null);
+		#end
+
+		bg = new FlxSprite().loadGraphic(Paths.menuBG("desat"));
+		bg.color = 0xFFEA71FD;
 		bg.screenCenter();
 		bg.antialiasing = ClientPrefs.data.antialiasing;
 		add(bg);
@@ -71,11 +71,14 @@ class BaseSettingsState extends MusicBeatSubstate
 		descText.borderSize = 2.4;
 		add(descText);
 
-        if (vars != null && vars.length > 0)
-        {
-            for (setting in vars)
-                addOption(SettingDataParser.parse(setting));
-        }
+		if (vars.length == 0 && options.length == 0)
+		{
+			vars = [{name: "THERE ARE NO OPTIONS HERE.", desc: "lmao", variable: "placeholder", type: header, defaultValue: false}];
+		}
+		for (setting in vars)
+		{
+			addOption(SettingDataParser.parse(setting));
+		}
 
         for (i in 0...options.length)
         {
@@ -489,6 +492,8 @@ class BaseSettingsState extends MusicBeatSubstate
 	function changeSelection(change:Int = 0)
 	{
 		curSelected += change;
+		if (options[curSelected].skip && options.length < 1)
+			changeSelection(change);
 		if (curSelected < 0)
 			curSelected = options.length - 1;
 		else if (curSelected >= options.length)

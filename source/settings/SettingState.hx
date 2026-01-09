@@ -32,7 +32,7 @@ class SettingState extends MusicBeatState
         super.create();
 
         FlxG.sound.playMusic(Paths.music("shop", "shared"));
-        var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image("menuBGBlue"));
+        var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.menuBG("blue"));
         bg.scrollFactor.set();
         bg.screenCenter();
         add(bg);

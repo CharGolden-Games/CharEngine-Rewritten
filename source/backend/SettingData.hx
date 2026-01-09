@@ -28,4 +28,5 @@ enum abstract ValueType(String) from String to String
     var string = "string";
     var value = "float";
     var key = 'keybind';
+    var header = 'header';
 }

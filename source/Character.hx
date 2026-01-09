@@ -545,6 +545,28 @@ class Character extends FlxSprite
 		{
 			loadCharFile(character);
 		}
+		else
+		{
+			switch (curCharacter)
+				{
+					case "bf" | 'bf-car' | 'bf-christmas':
+						healthbarColor = 0xFF22AADD;
+					case 'bf-pixel':
+						healthbarColor = 0xFF63D5FF;
+					case 'gf' | 'gf-pixel' | 'gf-christmas':
+						healthbarColor = 0xFFA5004D;
+					case 'dad' | 'parents' | 'parents-christmas':
+						healthbarColor = 0xFFAF66CE;
+					case 'spooky':
+						// never got why they didn't just make the icon color be one of these 2.
+						if (FlxG.random.bool())
+							healthbarColor = 0xFFB4B4B4;
+						else
+							healthbarColor = 0xFFD57E00;
+					case 'tankman':
+						healthbarColor = 0xFFFFFFFF;
+				}
+		}
 
 		dance();
 		animation.finish();
@@ -552,23 +574,23 @@ class Character extends FlxSprite
 		if (isPlayer)
 		{
 			flipX = !flipX;
+		}
+		#if sys
+		if (FileSystem.exists("assets/characters/" + character + '.lua'))
+		#else
+		if (Assets.exists('assets/characters/$character.lua'))
+		#end
+		{
+			// run lua code.
+		}
+		else
+		{
+			// Put character specific coding here!
 
-			// Doesn't flip for BF, since his are already in the right place???
-			/* if (!curCharacter.startsWith('bf'))
+			switch (character)
 			{
-				// var animArray
-				var oldRight = animation.getByName('singRIGHT').frames;
-				animation.getByName('singRIGHT').frames = animation.getByName('singLEFT').frames;
-				animation.getByName('singLEFT').frames = oldRight;
-
-				// IF THEY HAVE MISS ANIMATIONS??
-				if (animation.getByName('singRIGHTmiss') != null)
-				{
-					var oldMiss = animation.getByName('singRIGHTmiss').frames;
-					animation.getByName('singRIGHTmiss').frames = animation.getByName('singLEFTmiss').frames;
-					animation.getByName('singLEFTmiss').frames = oldMiss;
-				}
-			} */
+				
+			}
 		}
 	}
 

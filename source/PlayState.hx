@@ -100,8 +100,10 @@ class PlayState extends MusicBeatState
 
 	private var iconP1:HealthIcon;
 	private var iconP2:HealthIcon;
-	private var camHUD:FlxCamera;
-	private var camGame:FlxCamera;
+	public var camOther:FlxCamera;
+	public var camHUD:FlxCamera;
+	public var camNotes:FlxCamera;
+	public var camGame:FlxCamera;
 
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
 
@@ -168,6 +170,39 @@ class PlayState extends MusicBeatState
 	var camPos:FlxPoint;
 	var lightFadeShader:BuildingShaders;
 
+	var ratingShit(get, null):Array<Array<Dynamic>>;
+
+	function get_ratingShit():Array<Array<Dynamic>>
+	{
+		#if ALLOW_CECUSTOMIZATIONS
+		return [
+				['COORDINATION, HAVE YOU HEARD OF IT?', 0.2], // From 0% to 19%
+				['Are you even hitting the notes?', 0.4], // From 20% to 39%
+				['Get better nerd.', 0.5], // From 40% to 49%
+				['Bruh', 0.6], // From 50% to 59%
+				['Gettin\' there.', 0.69], // From 60% to 68%
+				['Hehe, Funny Number', 0.7], // 69%
+				['Pretty Nice', 0.8], // From 70% to 79%
+				['Kickin\' Ass!', 0.9], // From 80% to 89%
+				['HELL YEAH!', 1], // From 90% to 99%
+				['YOU ARE A BOT!!', 1] // The value on this one isn't used actually, since Perfect is always "1"
+			];
+		#else
+		return [
+				['You Suck!', 0.2], //From 0% to 19%
+				['Shit', 0.4], //From 20% to 39%
+				['Bad', 0.5], //From 40% to 49%
+				['Bruh', 0.6], //From 50% to 59%
+				['Meh', 0.69], //From 60% to 68%
+				['Nice', 0.7], //69%
+				['Good', 0.8], //From 70% to 79%
+				['Great', 0.9], //From 80% to 89%
+				['Sick!', 1], //From 90% to 99%
+				['Perfect!!', 1] //The value on this one isn't used actually, since Perfect is always "1"
+			];
+		#end
+	}
+
 	override public function create()
 	{
 		if (FlxG.sound.music != null)
@@ -178,11 +213,17 @@ class PlayState extends MusicBeatState
 
 		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = new SwagCamera();
+		camNotes = new FlxCamera();
 		camHUD = new FlxCamera();
+		camOther = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
+		camNotes.bgColor.alpha = 0;
+		camOther.bgColor.alpha = 0;
 
 		FlxG.cameras.reset(camGame);
+		FlxG.cameras.add(camNotes, false);
 		FlxG.cameras.add(camHUD, false);
+		FlxG.cameras.add(camOther, false);
 
 		persistentUpdate = true;
 		persistentDraw = true;
@@ -854,8 +895,8 @@ class PlayState extends MusicBeatState
 		add(iconP2);
 
 		grpNoteSplashes.cameras = [camHUD];
-		strumLineNotes.cameras = [camHUD];
-		notes.cameras = [camHUD];
+		strumLineNotes.cameras = [camNotes];
+		notes.cameras = [camNotes];
 		healthBar.cameras = [camHUD];
 		healthBarBG.cameras = [camHUD];
 		iconP1.cameras = [camHUD];
@@ -2287,8 +2328,26 @@ class PlayState extends MusicBeatState
 	}
 
 	var ratingFC:String = '';
+	var rating:String = '';
 	function recalcFC()
 	{
+			var accuracy = totalNotesHit / totalPlayed;
+			if (accuracy >= 1)
+			{
+				rating = ratingShit[ratingShit.length - 1][0];
+			}
+			else
+			{
+				for (i in 0...ratingShit.length - 1)
+				{
+					if (accuracy < ratingShit[i][1])
+					{
+						rating = ratingShit[i][0];
+						break;
+					}
+				}
+			}
+
 			if (sicks > 0) ratingFC = "SFC";
 			if (goods > 0) ratingFC = "GFC";
 			if (bads > 0 || shits > 0) ratingFC = "FC";
@@ -2302,7 +2361,7 @@ class PlayState extends MusicBeatState
 		var ratingPercent = Math.min(1, Math.max(0, totalNotesHit / totalPlayed));
 		recalcFC();
 
-		scoreTxt.text = 'Score: $songScore | Messed up $songMisses times | Accuracy: ${floorDecimal(ratingPercent * 100, 2)}% [$ratingFC]\nRating: Unimplemented';
+		scoreTxt.text = 'Score: $songScore | Messed up $songMisses times | Accuracy: ${floorDecimal(ratingPercent * 100, 2)}% [$ratingFC]\nRating: $rating';
 	}
 
 	function killCombo(?doMiss:Bool = true):Void
