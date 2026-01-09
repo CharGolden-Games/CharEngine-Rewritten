@@ -23,7 +23,7 @@ class OutdatedSubState extends MusicBeatState
 			+ ver
 			+ " while the most recent version is "
 			+ nextVer
-			+ "! Press Space to go to itch.io, or ESCAPE to ignore this!!",
+			+ "! Press ACCEPT to go to the engine page, or BACK to ignore this!!",
 			32);
 		txt.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);
 		txt.screenCenter();
@@ -34,7 +34,7 @@ class OutdatedSubState extends MusicBeatState
 	{
 		if (controls.ACCEPT)
 		{
-			FlxG.openURL("https://ninja-muffin24.itch.io/funkin");
+			FlxG.openURL("https://universe-engine.netlify.app/");
 		}
 		if (controls.BACK)
 		{
