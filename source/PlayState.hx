@@ -205,6 +205,9 @@ class PlayState extends MusicBeatState
 
 	override public function create()
 	{
+		#if DEBUGMENUS
+		disableTabMenu = true;
+		#end
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 

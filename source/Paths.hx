@@ -100,7 +100,7 @@ class Paths
 		return getPath('images/$key.png', IMAGE, library);
 	}
 
-	inline static public function menuBG(key:String, ?library:String)
+	inline static public function menuBG(key:String = 'desat', ?library:String)
 	{
 		return image('menuBG/$key', library);
 	}

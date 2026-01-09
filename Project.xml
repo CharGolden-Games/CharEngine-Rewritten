@@ -194,6 +194,7 @@
 	<define name="ALLOW_DISCORD"/>
 	<define name="ALLOW_DEBUGOPTIONS"/>
 	<define name="ALLOW_CECUSTOMIZATIONS"/>
+	<define name="DEBUGMENUS"/>
 	
 	<!-- <haxedef name="CLEAR_INPUT_SAVE"/> -->
 	

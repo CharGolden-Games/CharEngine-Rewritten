@@ -1,5 +1,6 @@
 package;
 
+import debug.ShortcutMenu;
 import flixel.FlxState;
 import Conductor.BPMChangeEvent;
 import flixel.FlxG;
@@ -15,6 +16,8 @@ class MusicBeatState extends FlxUIState
 	private var curBeat:Int = 0;
 	private var controls(get, never):Controls;
 
+	var disableTabMenu:Bool = #if DEBUGMENUS false #else true #end;
+
 	inline function get_controls():Controls
 		return Controls.instance;
 
@@ -23,6 +26,7 @@ class MusicBeatState extends FlxUIState
 		super.create();
 	}
 
+	var hadPersistence:Bool = false;
 	override function update(elapsed:Float)
 	{
 		// everyStep();
@@ -34,7 +38,22 @@ class MusicBeatState extends FlxUIState
 		if (oldStep != curStep && curStep >= 0)
 			stepHit();
 
+		if (FlxG.keys.justPressed.TAB)
+		{
+			if (!disableTabMenu)
+			{
+				hadPersistence = persistentUpdate;
+				if (persistentUpdate) persistentUpdate = false;
+				openSubState(new ShortcutMenu(this));
+			}
+		}
+
 		super.update(elapsed);
+	}
+	
+	public function closeShortcutMenu()
+	{
+		persistentUpdate = hadPersistence;
 	}
 
 	private function updateBeat():Void
