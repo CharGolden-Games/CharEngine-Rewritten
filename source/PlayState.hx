@@ -174,20 +174,6 @@ class PlayState extends MusicBeatState
 
 	function get_ratingShit():Array<Array<Dynamic>>
 	{
-		#if ALLOW_CECUSTOMIZATIONS
-		return [
-				['COORDINATION, HAVE YOU HEARD OF IT?', 0.2], // From 0% to 19%
-				['Are you even hitting the notes?', 0.4], // From 20% to 39%
-				['Get better nerd.', 0.5], // From 40% to 49%
-				['Bruh', 0.6], // From 50% to 59%
-				['Gettin\' there.', 0.69], // From 60% to 68%
-				['Hehe, Funny Number', 0.7], // 69%
-				['Pretty Nice', 0.8], // From 70% to 79%
-				['Kickin\' Ass!', 0.9], // From 80% to 89%
-				['HELL YEAH!', 1], // From 90% to 99%
-				['YOU ARE A BOT!!', 1] // The value on this one isn't used actually, since Perfect is always "1"
-			];
-		#else
 		return [
 				['You Suck!', 0.2], //From 0% to 19%
 				['Shit', 0.4], //From 20% to 39%
@@ -200,11 +186,13 @@ class PlayState extends MusicBeatState
 				['Sick!', 1], //From 90% to 99%
 				['Perfect!!', 1] //The value on this one isn't used actually, since Perfect is always "1"
 			];
-		#end
 	}
 
 	override public function create()
 	{
+		#if DEBUGMENUS
+		disableTabMenu = true;
+		#end
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
@@ -2361,7 +2349,7 @@ class PlayState extends MusicBeatState
 		var ratingPercent = Math.min(1, Math.max(0, totalNotesHit / totalPlayed));
 		recalcFC();
 
-		scoreTxt.text = 'Score: $songScore | Messed up $songMisses times | Accuracy: ${floorDecimal(ratingPercent * 100, 2)}% [$ratingFC]\nRating: $rating';
+		scoreTxt.text = 'Score: $songScore | Misses: $songMisses | Accuracy: ${floorDecimal(ratingPercent * 100, 2)}% [$ratingFC] | Rating: $rating';
 	}
 
 	function killCombo(?doMiss:Bool = true):Void

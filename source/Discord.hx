@@ -8,7 +8,7 @@ using StringTools;
 class DiscordClient
 {
 	#if ALLOW_DISCORD
-	public static var token:String = "1443042878732374228";
+	public static var token:String = "1288919403362123827";
 
 	public function new()
 	{
