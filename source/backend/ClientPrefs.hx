@@ -19,6 +19,7 @@ class SaveVariables
 	public var bsKillCombo:Bool = false; // Whether bads/shits kill combo.
 	public var classicHBLayering:Bool = false; // Whether the Healthbar's background should be behind (Base Funkin') or in front of (Psych/Codename) the actual bar.
 	public var uiStyle:String = "Universe Engine";
+	public var disableCreditBounce:Bool = false;
 
 	public var placeholder:Bool = false; // DO NOT REMOVE.
 

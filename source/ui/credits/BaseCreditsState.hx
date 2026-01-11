@@ -156,6 +156,9 @@ class BaseCreditsState extends MusicBeatState
         updateDesc();
 
         if (camTween != null) camTween.cancel();
-        camTween = FlxTween.tween(camCredits.scroll, {y: grpCredits.follow.y - 200}, 1, {ease: FlxEase.bounceOut});
+        if (!ClientPrefs.data.disableCreditBounce)
+            camTween = FlxTween.tween(camCredits.scroll, {y: grpCredits.follow.y - 200}, 1, {ease: FlxEase.bounceOut});
+        else
+            camTween = FlxTween.tween(camCredits.scroll, {y: grpCredits.follow.y - 200}, 0.5, {ease: FlxEase.quartOut});
     }
 }
