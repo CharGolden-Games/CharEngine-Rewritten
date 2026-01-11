@@ -1,0 +1,19 @@
+{
+    "name": "Credits Template",
+    "color": "0xFFBBAACC",
+    "desc": "This is a template for modded credits",
+    "icon": "ue",
+    "credits": [
+        {
+            "name": "Test Header",
+            "icon": "ue"
+        },
+        {
+            "name": "Test Option",
+            "icon": "char",
+            "link": "https://universe-engine.netlify.app/",
+            "color": "0xFFFF8800",
+            "desc": "Test Option"
+        }
+    ]
+}
