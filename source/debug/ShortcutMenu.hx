@@ -26,6 +26,15 @@ class ShortcutMenu extends MusicBeatSubstate
                 "Gameplay",
                 "Note Settings"
             ]
+        },
+        {
+            name: "Editors",
+            options: [
+                "Chart Editor",
+                "Character Editor",
+                "Stage Editor",
+                "Notetype Editor"
+            ]
         }
     ];
     var subOptions:Array<String> = [];
@@ -133,6 +142,9 @@ class ShortcutMenu extends MusicBeatSubstate
     {
         switch (subOptions[curSelected])
         {
+            case "Chart Editor":
+                PlayState.SONG = Song.loadFromJson("test", "test");
+                FlxG.switchState(new ChartingState());
             case _: trace("That state is not tied to anything yet!");
         }
     }

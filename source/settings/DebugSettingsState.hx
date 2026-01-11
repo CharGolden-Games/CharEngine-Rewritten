@@ -22,7 +22,8 @@ class DebugSettingsState extends BaseSettingsState
             {name: "Play Inst In Freeplay", desc: "Whether the inst to a song should play when selected.", variable: "playInstInFreeplay", type: bool, defaultValue: true},
             {name: "Antialiasing", desc: "Smoothes out the visuals lmao.", variable: "antialiasing", type: bool, defaultValue: true},
             {name: "Prefer Hardcoded Characters", desc: "Whether you prefer to use characters included in the source over modded ones. (CAN BREAK MODS.)", variable: "preferHardcodedChars", type: bool, defaultValue: true},
-            {name: "Bads/Shits Kill combo", desc: "Self Explanatory", variable: "bsKillCombo", type: bool, defaultValue: true}
+            {name: "Bads/Shits Kill combo", desc: "Self Explanatory", variable: "bsKillCombo", type: bool, defaultValue: true},
+            {name: "UI Style", desc: "What the HUD should look like", variable: "uiStyle", type: string, defaultValue: "Universe Engine", options: ["Universe Engine", "Original"]}
         ];
 
         watermark = "THIS PAGE MAY CONTAIN EXPERIMENTAL SETTINGS ANY SETTING WITH AN ASTERISK VOIDS YOUR SCORE!";

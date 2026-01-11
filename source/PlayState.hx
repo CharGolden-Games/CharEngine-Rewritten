@@ -869,9 +869,11 @@ class PlayState extends MusicBeatState
 		getHealthbarColors();
 		add(healthBar);
 
-		scoreTxt = new FlxText(healthBarBG.x, healthBarBG.y + 40, healthBarBG.width, 'Score: 0', 20);
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		scoreTxt = new FlxText(0, healthBarBG.y + 50, 0, 'Score: 0 | Misses: 0 | Rating: N/A', 20);
+		scoreTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
+		scoreTxt.borderSize = 2;
+		scoreTxt.screenCenter(X);
 		add(scoreTxt);
 
 		iconP1 = new HealthIcon(SONG.player1, true);
@@ -2348,8 +2350,9 @@ class PlayState extends MusicBeatState
 		if (totalPlayed < 1) return;
 		var ratingPercent = Math.min(1, Math.max(0, totalNotesHit / totalPlayed));
 		recalcFC();
-
-		scoreTxt.text = 'Score: $songScore | Misses: $songMisses | Accuracy: ${floorDecimal(ratingPercent * 100, 2)}% [$ratingFC] | Rating: $rating';
+		
+		scoreTxt.text = 'Score: $songScore | Misses: $songMisses | Rating: $rating (${floorDecimal(ratingPercent * 100, 2)}% / $ratingFC)';
+		scoreTxt.screenCenter(X);
 	}
 
 	function killCombo(?doMiss:Bool = true):Void

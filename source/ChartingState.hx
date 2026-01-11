@@ -562,7 +562,7 @@ class ChartingState extends MusicBeatState
 			changeNoteSustain(-Conductor.stepCrochet);
 		}
 
-		if (FlxG.keys.justPressed.TAB)
+		/* 	if (FlxG.keys.justPressed.TAB)
 		{
 			if (FlxG.keys.pressed.SHIFT)
 			{
@@ -576,10 +576,17 @@ class ChartingState extends MusicBeatState
 				if (UI_box.selected_tab >= 3)
 					UI_box.selected_tab = 0;
 			}
-		}
+		} */
 
 		if (!typingShit.hasFocus)
 		{
+			if (disableTabMenu) disableTabMenu = false;
+			if (FlxG.keys.justPressed.BACKSPACE)
+			{
+				FlxG.sound.music.stop();
+				vocals.stop();
+				FlxG.switchState(new MainMenuState()); // YUH
+			}
 			if (FlxG.keys.justPressed.SPACE)
 			{
 				if (FlxG.sound.music.playing)
@@ -649,6 +656,10 @@ class ChartingState extends MusicBeatState
 					vocals.time = FlxG.sound.music.time;
 				}
 			}
+		}
+		else
+		{
+			disableTabMenu = true;
 		}
 
 		_song.bpm = tempBpm;

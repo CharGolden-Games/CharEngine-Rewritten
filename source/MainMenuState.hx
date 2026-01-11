@@ -22,7 +22,7 @@ class MainMenuState extends MusicBeatState
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
-	var optionShit:Array<String> = ['story_mode', 'freeplay', 'options'];
+	var optionShit:Array<String> = ['story_mode', 'freeplay', 'options', 'credits'];
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
@@ -66,11 +66,11 @@ class MainMenuState extends MusicBeatState
 		menuItems = new FlxTypedGroup<FlxSprite>();
 		add(menuItems);
 
-		var tex = Paths.getSparrowAtlas("main_menu");
-
 		for (i in 0...optionShit.length)
 		{
-			var menuItem:FlxSprite = new FlxSprite(0, 60 + (i * 160)).loadGraphic(Paths.image("main_menu"));
+			var str:String = optionShit[i] == 'credits' ? 'mainmenu_credits' : "main_menu"; // fucky workaround
+			var tex = Paths.getSparrowAtlas(str);
+			var menuItem:FlxSprite = new FlxSprite(0, 60 + (i * 160)).loadGraphic(Paths.image(str));
 			menuItem.frames = tex;
 			menuItem.animation.addByPrefix('idle', optionShit[i] + " basic", 24);
 			menuItem.animation.addByPrefix('selected', optionShit[i] + " white", 24);
@@ -157,6 +157,9 @@ class MainMenuState extends MusicBeatState
 			case 'options':
 				selectedSomethin = true;
 				FlxG.switchState(new settings.SettingState());
+			case 'credits':
+				selectedSomethin = true;
+				FlxG.switchState(new ui.credits.CreditSelectorState());
 		}
 	}
 
