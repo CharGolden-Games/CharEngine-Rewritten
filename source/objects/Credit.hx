@@ -48,6 +48,7 @@ class Credit extends FlxTypedSpriteGroup<FlxSprite>
 
             this.icon = new FlxSprite().loadGraphic(Paths.image('credits/$icon'));
             add(this.icon);
+            this.icon.antialiasing = ClientPrefs.data.antialiasing;
         }
     }
 }

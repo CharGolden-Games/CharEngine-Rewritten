@@ -48,6 +48,7 @@ class BaseCreditsState extends MusicBeatState
 
         bg = new FlxSprite().loadGraphic(Paths.menuBG());
         bg.color = 0xFFFD719B;
+        bg.antialiasing = ClientPrefs.data.antialiasing;
         add(bg);
 
         grpCredits = new CreditGroup();
