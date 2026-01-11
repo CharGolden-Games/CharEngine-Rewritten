@@ -8,6 +8,9 @@ class UECredits extends BaseCreditsState
     public function new()
     {
         super(true);
+        
+        title = "Universe Engine Credits";
+
         addCredit("Universe Engine Devs");
 
         addCredit("VideoBotYT", "videobot", 0xFF14FFFF, 'https://linktr.ee/videobot', "First Dev and Engine Owner");

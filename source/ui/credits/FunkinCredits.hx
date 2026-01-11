@@ -6,7 +6,9 @@ class FunkinCredits extends BaseCreditsState
 {
     public function new()
     {
-        super();
+        super(true);
+        
+        title = "Funkin' Crew";
 
         addCredit("Funkin' Crew");
 

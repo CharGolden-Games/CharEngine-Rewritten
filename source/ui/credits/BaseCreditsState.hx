@@ -7,6 +7,7 @@ import objects.Credit.CreditType;
 class BaseCreditsState extends MusicBeatState
 {
     var bg:FlxSprite;
+    var alphabet:Alphabet;
 
     var options:Array<CreditType> = [];
     var grpCredits:CreditGroup;
@@ -60,10 +61,15 @@ class BaseCreditsState extends MusicBeatState
         descBox.alpha = 0.8;
         add(descBox);
 
-        descText = new FlxText(0, 0, FlxG.width, "No Desc!", 20);
+        alphabet = new Alphabet(0, 0, title);
+        alphabet.setScale(0.5, 0.5);
+        alphabet.snapToPosition();
+        alphabet.cameras = [camDesc];
+        add(alphabet);
+
+        descText = new FlxText(0, 50, FlxG.width, "No Desc!", 20);
         descText.cameras = [camDesc];
         descText.alpha = 0.8;
-        descText.alignment = CENTER;
         add(descText);
 
         for (i in 0...options.length)
@@ -129,8 +135,8 @@ class BaseCreditsState extends MusicBeatState
     {
         if (grpCredits.curMember.hasDesc)
         {
-            descText.text = grpCredits.curMember.desc;
-            descBox.setGraphicSize(FlxG.width, Std.int(descText.height));
+            descText.text = 'The people that made this possible!\n' + grpCredits.curMember.desc;
+            descBox.setGraphicSize(FlxG.width, Std.int(descText.height + 50));
             descBox.updateHitbox();
             descBox.visible = true;
             descText.visible = true;

@@ -24,7 +24,7 @@ class ModCreditsState extends BaseCreditsState
 {
     public function new(?file:String = 'credits')
     {
-        super();
+        super(true);
         loadCredits(file);
     }
 

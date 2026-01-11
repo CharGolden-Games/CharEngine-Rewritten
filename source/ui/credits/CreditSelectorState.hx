@@ -15,6 +15,8 @@ class CreditSelectorState extends BaseCreditsState
     {
         super();
 
+        title = "Engine Credits";
+
         addCredit("Universe Engine Team", "ue", 0xFF8888FF, null, "See who helped with the engine!");
         addCredit("Funkin' Crew", "funkin", 0xFFFF8888, null, "The team behind the original kick-ass game!");
 
