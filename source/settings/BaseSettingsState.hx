@@ -492,8 +492,11 @@ class BaseSettingsState extends MusicBeatSubstate
 	function changeSelection(change:Int = 0)
 	{
 		curSelected += change;
-		if (options[curSelected].skip && options.length < 1)
+		if (options[curSelected].skip && options.length > 1)
+		{
+			if (change == 0) change = 1;
 			changeSelection(change);
+		}
 		if (curSelected < 0)
 			curSelected = options.length - 1;
 		else if (curSelected >= options.length)
