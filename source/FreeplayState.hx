@@ -287,7 +287,7 @@ class FreeplayState extends MusicBeatState
 		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
 		// lerpScore = 0;
 
-		if (ClientPrefs.data.playInstInFreeplay)
+		if (ClientPrefs.data.previewInst)
 			FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
 
 		var bullShit:Int = 0;

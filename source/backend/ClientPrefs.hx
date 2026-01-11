@@ -13,7 +13,7 @@ class SaveVariables
 	public var update:Bool = true;
 	public var ghostTapping:Bool = true;
 	public var playAnimOnGhostTap:Bool = true;
-	public var playInstInFreeplay:Bool = true;
+	public var previewInst:Bool = true;
 	public var antialiasing:Bool = true;
 	public var preferHardcodedChars:Bool = false;
 	public var bsKillCombo:Bool = false; // Whether bads/shits kill combo.
@@ -26,7 +26,11 @@ class SaveVariables
 
 	function resetInvalidOptions() // use this function to reset any options that may have changed since a previous commit/version
 	{
-		
+		if (FlxG.save.data.playInstInFreeplay != null)
+		{
+			previewInst = FlxG.save.data.playInstInFreeplay;
+			FlxG.save.data.playInstInFreeplay = null;
+		}
 	}
 }
 
