@@ -9,7 +9,7 @@ class CreditSelectorState extends BaseCreditsState
         super();
 
         addCredit("Universe Engine Team", "ue", 0xFF8888FF, null, "See who helped with the engine!");
-        addCredit("Funkin' Crew", "ue", 0xFFFF8888, null, "The team behind the original kick-ass game!");
+        addCredit("Funkin' Crew", "funkin", 0xFFFF8888, null, "The team behind the original kick-ass game!");
     }
 
     public override function selectThing(credit:Credit) {
@@ -20,7 +20,7 @@ class CreditSelectorState extends BaseCreditsState
             case "Universe Engine Team":
                 FlxG.switchState(new UECredits());
             case "Funkin' Crew":
-                trace("Funkin'");
+                FlxG.switchState(new FunkinCredits());
         }
     }
 }

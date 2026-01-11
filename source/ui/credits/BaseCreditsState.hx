@@ -72,6 +72,14 @@ class BaseCreditsState extends MusicBeatState
         }
 
         changeSelection();
+        snapToPosition();
+    }
+
+    function snapToPosition()
+    {
+        if (camTween != null) camTween.cancel();
+
+        camCredits.scroll.y = grpCredits.follow.y - 200;
     }
 
     public override function update(elapsed:Float) {

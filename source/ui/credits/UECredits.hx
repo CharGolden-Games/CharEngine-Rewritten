@@ -17,6 +17,12 @@ class UECredits extends BaseCreditsState
 
         addCredit("Daveberry", "dave", 0xFF008BFF, 'https://daveberry.netlify.app/', 'Former DEV, (No Longer) In charge of the LUA, HX files and other',);
         addCredit("BaranMuzu", "baranmuzu", 0xFFBE9877, 'https://linktr.ee/baranmuzu', 'Former DEV, (No Longer) In charge of the LUA files and other');
+
+        addCredit("Special Thanks");
+
+        addCredit("An Ammar", "Ammar", 0xFF00FF00, "https://gamebanana.com/mods/381804", "Hype Mode, Detached Health Bar, Playtester (Pre 1.0)");
+        addCredit("Dinus Game", "Dinus Game", 0xFF27FF27, "https://gamebanana.com/members/2053946", "freakyMenu Universe Engine music.");
+        addCredit("ShadowMario", "shadowmario", 0xFF444444, 'https://twitter.com/Shadow_Mario_', "Some code borrowed from Psych");
     }
 
     override function exit() {
