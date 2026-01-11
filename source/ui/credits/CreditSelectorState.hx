@@ -34,11 +34,11 @@ class CreditSelectorState extends BaseCreditsState
         switch (credit.text)
         {
             case "Universe Engine Team":
-                FlxG.switchState(new UECredits());
+                openSubState(new UECredits());
             case "Funkin' Crew":
-                FlxG.switchState(new FunkinCredits());
+                openSubState(new FunkinCredits());
             default:
-                FlxG.switchState(new ModCreditsState(files[grpCredits.index]));
+                openSubState(new ModCreditsState(files[grpCredits.index]));
         }
     }
 

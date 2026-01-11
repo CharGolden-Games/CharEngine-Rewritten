@@ -3,12 +3,12 @@ package ui.credits;
 import objects.Credit;
 import settings.BaseSettingsState;
 
-class UECredits extends BaseCreditsState
+class UECredits extends BaseCreditsSubState
 {
     public function new()
     {
-        super(true);
-        
+        super();
+
         title = "Universe Engine Credits";
 
         addCredit("Universe Engine Devs");
@@ -26,17 +26,5 @@ class UECredits extends BaseCreditsState
         addCredit("An Ammar", "Ammar", 0xFF00FF00, "https://gamebanana.com/mods/381804", "Hype Mode, Detached Health Bar, Playtester (Pre 1.0)");
         addCredit("Dinus Game", "Dinus Game", 0xFF27FF27, "https://gamebanana.com/members/2053946", "freakyMenu Universe Engine music.");
         addCredit("ShadowMario", "shadowmario", 0xFF444444, 'https://twitter.com/Shadow_Mario_', "Some code borrowed from Psych");
-    }
-
-    override function exit() {
-        super.exit();
-
-        FlxG.switchState(new CreditSelectorState());
-    }
-
-    override function selectThing(credit:Credit) {
-        super.selectThing(credit);
-
-        if (grpCredits.curMember.hasLink) FlxG.openURL(grpCredits.curMember.link);
     }
 }

@@ -20,11 +20,11 @@ typedef CreditStruc = {
     @:optional var link:String;
 }
 
-class ModCreditsState extends BaseCreditsState
+class ModCreditsState extends BaseCreditsSubState
 {
     public function new(?file:String = 'credits')
     {
-        super(true);
+        super();
         loadCredits(file);
     }
 
@@ -39,17 +39,5 @@ class ModCreditsState extends BaseCreditsState
         {
             addCredit(credit.name, credit.icon, FlxColor.fromString(credit.color), credit.link, credit.desc);
         }
-    }
-
-    override function exit() {
-        super.exit();
-
-        FlxG.switchState(new CreditSelectorState());
-    }
-
-    override function selectThing(credit:Credit) {
-        super.selectThing(credit);
-
-        if (grpCredits.curMember.hasLink) FlxG.openURL(grpCredits.curMember.link);
     }
 }
