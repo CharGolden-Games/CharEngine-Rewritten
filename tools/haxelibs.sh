@@ -13,6 +13,5 @@ haxelib install flixel-ui 2.5.0 && haxelib set flixel-ui 2.5.0
 haxelib install thx,semver 0.2.2 && haxelib set thx,semver 0.2.2
 haxelib install flixel-demos 3.3.0 && haxelib set flixel-demos 3.3.0
 haxelib install flixel 5.2.2 && haxelib set flixel 5.2.2
-haxelib install polymod 1.7.0 && haxelib set polymod 1.7.0
 haxelib install hxcpp 4.3.2 && haxelib set hxcpp 4.3.2
 haxelib git https://github.com/Aidan63/linc_discord-rpc
