@@ -1,5 +1,7 @@
 package debug;
 
+import ui.credits.CreditSelectorState;
+
 private typedef Option = {
     var name:String;
     var options:Array<String>;
@@ -15,7 +17,8 @@ class ShortcutMenu extends MusicBeatSubstate
             options: [
                 "Main Menu",
                 "Freeplay",
-                "Mods"
+                "Mods",
+                "Credits"
             ]
         },
         {
@@ -145,6 +148,8 @@ class ShortcutMenu extends MusicBeatSubstate
             case "Chart Editor":
                 PlayState.SONG = Song.loadFromJson("test", "test");
                 FlxG.switchState(new ChartingState());
+            case "Credits":
+                FlxG.switchState(new CreditSelectorState());
             case _: trace("That state is not tied to anything yet!");
         }
     }
