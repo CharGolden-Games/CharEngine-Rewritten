@@ -1,0 +1,3 @@
+-p ./tools/libraries
+--main GetHaxelibs
+--interp

@@ -1,0 +1,2 @@
+-p tools/release
+--run MakeNewRelease
