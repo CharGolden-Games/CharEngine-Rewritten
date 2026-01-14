@@ -70,7 +70,7 @@ class SettingState extends MusicBeatState
             grpOptions.add(text);
         }
 
-        top = new TopBar({label: "Test"});
+        top = new TopBar([{label: "Test"}]);
         add(top);
 
         changeSelection();
