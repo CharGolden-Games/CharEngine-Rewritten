@@ -3,6 +3,7 @@ package settings;
 import flixel.FlxSprite;
 import flixel.FlxCamera;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import objects.TopBar;
 
 class SettingState extends MusicBeatState
 {
@@ -27,6 +28,8 @@ class SettingState extends MusicBeatState
                 openSubState(new InputState());
         }
     }
+    
+    var top:TopBar;
 
     public override function create() {
         super.create();
@@ -66,6 +69,9 @@ class SettingState extends MusicBeatState
             text.screenCenter(X);
             grpOptions.add(text);
         }
+
+        top = new TopBar({label: "Test"});
+        add(top);
 
         changeSelection();
     }
