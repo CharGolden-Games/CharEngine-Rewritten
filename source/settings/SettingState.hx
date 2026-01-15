@@ -4,6 +4,7 @@ import flixel.FlxSprite;
 import flixel.FlxCamera;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import objects.TopBar;
+import objects.TopButton.TopButtonOption;
 
 class SettingState extends MusicBeatState
 {
@@ -11,6 +12,8 @@ class SettingState extends MusicBeatState
     var curSelected:Int = 0;
     var grpOptions:FlxTypedGroup<Alphabet>;
     var bg:FlxSprite;
+
+    var topMenu:Array<TopButtonOption>;
 
     function goToPage()
     {
@@ -70,7 +73,19 @@ class SettingState extends MusicBeatState
             grpOptions.add(text);
         }
 
-        top = new TopBar([{label: "Test"}]);
+        topMenu = [
+            {
+                label: "Controls"
+            },
+            {
+                label: "Gameplay"
+            },
+            {
+                label: "Visuals"
+            }
+        ];
+
+        top = new TopBar(topMenu);
         add(top);
 
         changeSelection();

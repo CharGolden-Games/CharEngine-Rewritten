@@ -13,8 +13,7 @@ class TopBar extends FlxSpriteGroup{
 
         var x:Int = 0;
         for (option in options){
-            var finalOptions:TopButtonOption = {label: option.label};
-            var button = new TopButton(finalOptions, barSprite.x+x, 0);
+            var button = new TopButton({label: option.label}, barSprite.x+x, 0);
             add(button);
             x+=Std.int(button.width);
         }
