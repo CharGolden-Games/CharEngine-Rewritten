@@ -3,7 +3,7 @@ package objects.tabs;
 import objects.TabButton;
 import objects.TabButton.TabButtonOption;
 
-class TopBar extends FlxTypedSpriteGroup<TabButton>{
+class TabBar extends FlxTypedSpriteGroup<TabButton>{
     //var barSprite:FlxSprite; // moving the bg to the buttons themselves lmao.
     public var index(default, null):Int = 0;
     var globalOffset:FlxPoint = new FlxPoint();
