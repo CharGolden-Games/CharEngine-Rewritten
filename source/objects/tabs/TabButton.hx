@@ -1,11 +1,11 @@
-package objects;
+package objects.tabs;
 
-typedef TopButtonOption = {
+typedef TabButtonOption = {
     var label:String;
     @:optional var onClick:Void->Void;
 }
 
-class TopButton extends FlxSpriteGroup
+class TabButton extends FlxSpriteGroup
 {
     public var onClick:Null<Void->Void>;
     var label:FlxText;
@@ -15,7 +15,7 @@ class TopButton extends FlxSpriteGroup
         height: 0
     }
 
-    public function new(options:TopButtonOption, x:Float, y:Float){
+    public function new(options:TabButtonOption, x:Float, y:Float){
         super(x, y);
         label = new FlxText(x + 9, y, 0, options.label, 15);
         

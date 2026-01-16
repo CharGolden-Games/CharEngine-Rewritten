@@ -3,8 +3,8 @@ package settings;
 import flixel.FlxSprite;
 import backend.SettingData;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import objects.TopBar;
-import objects.TopButton.TopButtonOption;
+import objects.tabs.TabBar;
+import objects.tabs.TabButton.TabButtonOption;
 
 class SettingState extends MusicBeatState
 {
@@ -13,8 +13,8 @@ class SettingState extends MusicBeatState
     var grpOptions:FlxTypedGroup<FlxText>;
     var bg:FlxSprite;
 
-    var topMenu:Array<TopButtonOption> = [];
-    var top:TopBar;
+    var topMenu:Array<TabButtonOption> = [];
+    var top:TabBar;
 
     public override function create() {
         super.create();
@@ -35,7 +35,7 @@ class SettingState extends MusicBeatState
             topMenu.push({label: options[i]});
         }
 
-        top = new TopBar(topMenu, 20, 10);
+        top = new TabBar(topMenu, 20, 10);
         add(top);
 
         changeSelection();

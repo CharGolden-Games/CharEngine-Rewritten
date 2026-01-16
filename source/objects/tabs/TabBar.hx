@@ -1,9 +1,9 @@
-package objects;
+package objects.tabs;
 
-import objects.TopButton;
-import objects.TopButton.TopButtonOption;
+import objects.TabButton;
+import objects.TabButton.TabButtonOption;
 
-class TopBar extends FlxTypedSpriteGroup<TopButton>{
+class TopBar extends FlxTypedSpriteGroup<TabButton>{
     //var barSprite:FlxSprite; // moving the bg to the buttons themselves lmao.
     public var index(default, null):Int = 0;
     var globalOffset:FlxPoint = new FlxPoint();
@@ -18,7 +18,7 @@ class TopBar extends FlxTypedSpriteGroup<TopButton>{
         return l;
     }
     
-    public function new(?options:Array<TopButtonOption>, x:Float = 0, y:Float = 0) {
+    public function new(?options:Array<TabButtonOption>, x:Float = 0, y:Float = 0) {
         super();
         globalOffset.set(x, y);
         /* barSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, 25, 0xff9a3cc0);
@@ -34,7 +34,7 @@ class TopBar extends FlxTypedSpriteGroup<TopButton>{
         for (i in 0...options.length)
         {
             var option = options[i];
-            var button = new TopButton({label: option.label}, 0, globalOffset.y);
+            var button = new TabButton({label: option.label}, 0, globalOffset.y);
             button.onClick = ()->{
                 onClick(button, option.onClick);
             }
@@ -45,7 +45,7 @@ class TopBar extends FlxTypedSpriteGroup<TopButton>{
         updateOffsets();
     }
     
-    private function onClick(o:TopButton, ?oc:Void->Void):Void
+    private function onClick(o:TabButton, ?oc:Void->Void):Void
     {
         index = o.ID;
         if (oc != null) oc();
