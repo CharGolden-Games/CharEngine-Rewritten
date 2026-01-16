@@ -23,7 +23,7 @@ class TopButton extends FlxSpriteGroup
         size.width = Math.ceil(label.width) + 10;
         size.height = Math.ceil(label.height) + 6;
 
-        bg = new FlxSprite(x + 10, y + 4).makeGraphic(size.width, size.height, 0xFF9A3CC0);
+        bg = new FlxSprite(x + 10, y + 4).makeGraphic(size.width, size.height, 0x819B3CC0);
         add(bg);
         add(label);
 

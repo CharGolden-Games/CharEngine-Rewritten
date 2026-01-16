@@ -1,7 +1,7 @@
 package settings;
 
 import flixel.FlxSprite;
-import flixel.FlxCamera;
+import backend.SettingData;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import objects.TopBar;
 import objects.TopButton.TopButtonOption;
@@ -10,28 +10,10 @@ class SettingState extends MusicBeatState
 {
     var options:Array<String> = ["Controls", "Visuals and UI", "Engine Settings", "Gameplay" #if ALLOW_DEBUGOPTIONS , "Debug Settings" #end];
     var curSelected:Int = 0;
-    var grpOptions:FlxTypedGroup<Alphabet>;
+    var grpOptions:FlxTypedGroup<FlxText>;
     var bg:FlxSprite;
 
     var topMenu:Array<TopButtonOption> = [];
-
-    function goToPage()
-    {
-        switch(options[curSelected].toLowerCase())
-        {
-            case 'debug settings':
-                openSubState(new DebugSettingsState());
-            case "visuals and ui":
-                openSubState(new PlaceholderSubState());
-            case "engine settings":
-                openSubState(new PlaceholderSubState());
-            case "gameplay":
-                openSubState(new PlaceholderSubState());
-            case 'controls':
-                openSubState(new InputState());
-        }
-    }
-    
     var top:TopBar;
 
     public override function create() {
@@ -43,35 +25,11 @@ class SettingState extends MusicBeatState
         bg.screenCenter();
         add(bg);
 
-        grpOptions = new FlxTypedGroup<Alphabet>();
+        grpOptions = new FlxTypedGroup<FlxText>();
         add(grpOptions);
 
         for (i in 0...options.length)
         {
-            var preOffset:Int = 0;
-            var postOffset:Int = 0;
-
-            if (options.length <= 3)
-            {
-                postOffset = 100;
-                preOffset = 50;
-            }
-            else if (options.length <= 4)
-            {
-                postOffset = 50;
-                preOffset = 100;
-            }
-            else if (options.length <= 6)
-            {
-                postOffset = 25;
-                preOffset = 50;
-            }
-
-            var text:Alphabet = new Alphabet(0, ((100 + postOffset) * i) + preOffset, options[i], true);
-            text.ID = i;
-            text.screenCenter(X);
-            grpOptions.add(text);
-
             topMenu.push({label: options[i]});
         }
 
@@ -86,15 +44,24 @@ class SettingState extends MusicBeatState
 
         if (controls.UI_DOWN_P)
         {
-            changeSelection(1);
+            changeSetting(1);
         }
         if (controls.UI_UP_P)
+        {
+            changeSetting(-1);
+        }
+
+        if (controls.UI_RIGHT_P)
+        {
+            changeSelection(1);
+        }
+        if (controls.UI_LEFT_P)
         {
             changeSelection(-1);
         }
         if (controls.ACCEPT)
         {
-            goToPage();
+            /* goToPage(); */ // old shi-
         }
         if (controls.BACK)
         {
@@ -106,29 +73,97 @@ class SettingState extends MusicBeatState
     function changeSelection(change:Int = 0)
     {
         FlxG.sound.play(Paths.sound("scrollMenu"));
-
-        curSelected += change;
-        if (curSelected > options.length - 1)
-            curSelected = 0;
-        if (curSelected < 0)
-            curSelected = options.length - 1;
-
         top.changeIndex(change);
 
-        grpOptions.forEachAlive((member)->{
-            if (member.ID == curSelected)
-            {
-                member.alpha = 1;
-            }
-            else
-            {
-                member.alpha = 0.6;
-            }
-        });
+        loadSettings();
     }
 
-    public override function closeSubState() {
-        super.closeSubState();
-        ClientPrefs.savePrefs();
+    function loadSettings()
+    {
+        curSelected = 0;
+        grpOptions.forEachExists((_)->{_.destroy();});
+        grpOptions.clear();
+
+        var optionShit:Array<SettingData> = [];
+        switch (options[top.index].toLowerCase())
+        {
+            case "controls": optionShit = SettingTabs.controls;
+            default: optionShit = SettingTabs._default;
+        }
+        for (i in 0...optionShit.length)
+        {
+            var sd = optionShit[i];
+            var text:FlxText = new FlxText(30, 100 * (i + 1), FlxG.width, sd.name, 30);
+            text.scrollFactor.set();
+            var defaultValue:Dynamic;
+            if (sd.type != key)
+                defaultValue = Reflect.field(ClientPrefs.data, sd.variable);
+            else
+                defaultValue = ClientPrefs.keyBinds[sd.variable];
+            switch (sd.type)
+            {
+                case header:
+                    text.screenCenter(X);
+                case bool:
+                    text.text = "[";
+                    if (defaultValue == true) text.text += " X ";
+                    text.text += "] " + sd.name;
+                case value | string:
+                    text.text = '${sd.name}: $defaultValue';
+                case key:
+                    text.text = '${sd.name}: ${SettingTabs.keyToString(defaultValue)}';
+            }
+            text.ID = i;
+            grpOptions.add(text);
+        }
+        changeSetting();
+    }
+
+    function changeSetting(change:Int = 0)
+    {
+        FlxG.sound.play(Paths.sound("scrollMenu"));
+        curSelected += change;
+        if (curSelected < 0)
+            curSelected = grpOptions.length - 1;
+        if (curSelected > grpOptions.length - 1)
+            curSelected = 0;
+
+        grpOptions.forEachExists((text)->{
+            if (text.ID == curSelected)
+                text.alpha = 1;
+            else
+                text.alpha = 0.6;
+        });
+    }
+}
+
+class SettingTabs
+{
+    public static final _default:Array<SettingData> = [
+        {
+            name: "NO SETTINGS DEFINED??",
+            variable: "placeholder",
+            type: header,
+            defaultValue: null
+        }
+    ];
+
+    public static final controls:Array<SettingData> = [
+        {
+            name: "UI LEFT",
+            variable: "ui_left",
+            type: key,
+            defaultValue: ClientPrefs.keyBinds["ui_left"]
+        }
+    ];
+
+    public static function keyToString(keys:Array<FlxKey>)
+    {
+        var a:Array<String> = [];
+        for (key in keys)
+        {
+            a.push(key.toString());
+        }
+        return a;
     }
 }

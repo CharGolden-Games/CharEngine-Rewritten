@@ -79,6 +79,7 @@ class TitleState extends MusicBeatState
         FlxG.sound.playMusic(Paths.music("crashFix"), 0); // crash fix
 		FlxG.sound.music.stop();
 		FlxG.save.bind('funkin', 'Team-UniverseEngine');
+		Main.setupSignals();
 		ClientPrefs.loadPrefs();
 		Highscore.load();
 		startedIntro = false;

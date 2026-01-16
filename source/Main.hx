@@ -90,6 +90,14 @@ class Main extends Sprite
 		#end
 	}
 
+	public static function setupSignals()
+	{
+		FlxG.signals.preStateSwitch.add(()->{
+			FlxG.save.data.volume = FlxG.sound.volume;
+			FlxG.save.flush();
+		});
+	}
+
 	function onCrash(e:UncaughtErrorEvent):Void
 	{
 		Application.current.window.alert(e.error, "Crash!");

@@ -69,9 +69,9 @@ class PlayState extends MusicBeatState
 	private var vocals:FlxSound;
 	private var vocalsFinished:Bool = false;
 
-	private var dad:Character;
-	private var gf:Character;
-	private var boyfriend:Boyfriend;
+	public var dad:Character;
+	public var gf:Character;
+	public var boyfriend:Boyfriend;
 
 	private var notes:FlxTypedGroup<Note>;
 	private var unspawnNotes:Array<Note> = [];
@@ -188,11 +188,14 @@ class PlayState extends MusicBeatState
 			];
 	}
 
+	public static var instance:PlayState;
+
 	override public function create()
 	{
 		#if DEBUGMENUS
 		disableTabMenu = true;
 		#end
+		instance = this;
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
@@ -224,7 +227,7 @@ class PlayState extends MusicBeatState
 
 		foregroundSprites = new FlxTypedGroup<BGSprite>();
 
-		switch (SONG.song.toLowerCase())
+		/* switch (SONG.song.toLowerCase()) // What the fuck is this dawg.
 		{
 			case 'tutorial':
 				dialogue = ["Hey you're pretty cute.", 'Use the arrow keys to keep up \nwith me singing.'];
@@ -244,12 +247,14 @@ class PlayState extends MusicBeatState
 					"Only then I will even CONSIDER letting you\ndate my daughter!"
 				];
 			case 'senpai':
-				dialogue = CoolUtil.coolTextFile(Paths.txt('senpai/senpaiDialogue'));
+				dialogue = CoolUtil.coolTextFile(Paths.txt('songData/senpai/senpaiDialogue'));
 			case 'roses':
-				dialogue = CoolUtil.coolTextFile(Paths.txt('roses/rosesDialogue'));
+				dialogue = CoolUtil.coolTextFile(Paths.txt('songData/roses/rosesDialogue'));
 			case 'thorns':
-				dialogue = CoolUtil.coolTextFile(Paths.txt('thorns/thornsDialogue'));
-		}
+				dialogue = CoolUtil.coolTextFile(Paths.txt('songData/thorns/thornsDialogue'));
+		} */
+
+		dialogue = loadDialogue();
 
 		#if ALLOW_DISCORD
 		initDiscord();
@@ -967,6 +972,16 @@ class PlayState extends MusicBeatState
 		} 
 
 		super.create();
+	}
+
+	function loadDialogue():Array<String>
+	{
+		if (Assets.exists("assets/songData/" + SONG.song + "dialogue.txt"))
+		{
+			return CoolUtil.coolTextFile(Paths.txt('songData/${SONG.song}/dialogue'));
+		}
+
+		return null;
 	}
 
 	function ughIntro()
