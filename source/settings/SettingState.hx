@@ -8,7 +8,7 @@ import objects.tabs.TabButton.TabButtonOption;
 
 class SettingState extends MusicBeatState
 {
-    var options:Array<String> = ["Controls", "Visuals and UI", "Engine Settings", "Gameplay" #if ALLOW_DEBUGOPTIONS , "Debug Settings" #end];
+    var options:Array<String> = ["Controls", "Visuals and UI", "Engine Settings", "Gameplay"];
     var curSelected:Int = 0;
     var grpOptions:FlxTypedGroup<FlxText>;
     var bg:FlxSprite;
