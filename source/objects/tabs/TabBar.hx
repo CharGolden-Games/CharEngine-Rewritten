@@ -1,7 +1,7 @@
 package objects.tabs;
 
-import objects.TabButton;
-import objects.TabButton.TabButtonOption;
+import objects.tabs.TabButton;
+import objects.tabs.TabButton.TabButtonOption;
 
 class TabBar extends FlxTypedSpriteGroup<TabButton>{
     //var barSprite:FlxSprite; // moving the bg to the buttons themselves lmao.
