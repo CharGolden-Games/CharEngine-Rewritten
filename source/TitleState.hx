@@ -428,8 +428,8 @@ class TitleState extends MusicBeatState
 
 			FlxG.camera.flash(FlxColor.WHITE, 1);
 			FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
+			transitioning = true;
 			if (FlxG.sound.music.volume < 1) FlxG.sound.music.fadeIn(0.5, FlxG.sound.music.volume, 1, (_)->{ // fix for the music being muted on outdated state.
-				transitioning = true;
 				// FlxG.sound.music.stop();
 
 				if (!mustUpdate)
