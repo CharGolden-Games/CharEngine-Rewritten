@@ -27,6 +27,9 @@ class SettingState extends MusicBeatState
         bg.screenCenter();
         add(bg);
 
+        var funnyBG:FlxSprite = new FlxSprite(30, 55).makeGraphic(FlxG.width - 60, FlxG.height - 100, 0x819B3CC0);
+        add(funnyBG);
+
         grpOptions = new FlxTypedGroup<FlxText>();
         add(grpOptions);
 
@@ -90,6 +93,7 @@ class SettingState extends MusicBeatState
         switch (options[top.index].toLowerCase())
         {
             case "controls": optionShit = SettingTabs.controls;
+            case "debug settings": optionShit = SettingTabs.debug;
             default: optionShit = SettingTabs._default;
         }
         for (i in 0...optionShit.length)
@@ -105,7 +109,10 @@ class SettingState extends MusicBeatState
             switch (sd.type)
             {
                 case header:
-                    text.screenCenter(X);
+                    if (options[top.index].toLowerCase() == "debug settings")
+                    {
+                        text.text = '${sd.name} >';
+                    }
                 case bool:
                     text.text = "[";
                     if (defaultValue == true) text.text += " X ";
@@ -161,6 +168,39 @@ class SettingTabs
             variable: "ui_left",
             type: key,
             defaultValue: ClientPrefs.keyBinds["ui_left"]
+        }
+    ];
+
+    public static final debug:Array<SettingData> = [
+        {
+            name: "Chart Editor",
+            variable: "placeholder",
+            type: header,
+            defaultValue: null
+        },
+        {
+            name: "Character Editor",
+            variable: "placeholder",
+            type: header,
+            defaultValue: null
+        },
+        {
+            name: "Modchart Editor",
+            variable: "placeholder",
+            type: header,
+            defaultValue: null
+        },
+        {
+            name: "Stage Editor",
+            variable: "placeholder",
+            type: header,
+            defaultValue: null
+        },
+        {
+            name: "Notetype Editor",
+            variable: "placeholder",
+            type: header,
+            defaultValue: null
         }
     ];
 
