@@ -8,16 +8,16 @@ import objects.TopButton.TopButtonOption;
 
 class SettingState extends MusicBeatState
 {
-    var options:Array<String> = ["controls", "visuals and ui", "engine settings", "gameplay" #if ALLOW_DEBUGOPTIONS , "debug settings" #end];
+    var options:Array<String> = ["Controls", "Visuals and UI", "Engine Settings", "Gameplay" #if ALLOW_DEBUGOPTIONS , "Debug Settings" #end];
     var curSelected:Int = 0;
     var grpOptions:FlxTypedGroup<Alphabet>;
     var bg:FlxSprite;
 
-    var topMenu:Array<TopButtonOption>;
+    var topMenu:Array<TopButtonOption> = [];
 
     function goToPage()
     {
-        switch(options[curSelected])
+        switch(options[curSelected].toLowerCase())
         {
             case 'debug settings':
                 openSubState(new DebugSettingsState());
@@ -71,21 +71,11 @@ class SettingState extends MusicBeatState
             text.ID = i;
             text.screenCenter(X);
             grpOptions.add(text);
+
+            topMenu.push({label: options[i]});
         }
 
-        topMenu = [
-            {
-                label: "Controls"
-            },
-            {
-                label: "Gameplay"
-            },
-            {
-                label: "Visuals"
-            }
-        ];
-
-        top = new TopBar(topMenu);
+        top = new TopBar(topMenu, 20, 10);
         add(top);
 
         changeSelection();
@@ -122,6 +112,8 @@ class SettingState extends MusicBeatState
             curSelected = 0;
         if (curSelected < 0)
             curSelected = options.length - 1;
+
+        top.changeIndex(change);
 
         grpOptions.forEachAlive((member)->{
             if (member.ID == curSelected)

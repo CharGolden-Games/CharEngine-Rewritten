@@ -5,16 +5,29 @@ typedef TopButtonOption = {
     @:optional var onClick:Void->Void;
 }
 
-class TopButton extends FlxTypedSpriteGroup<FlxSprite>{
-    var onClick:Null<Void->Void>;
+class TopButton extends FlxSpriteGroup
+{
+    public var onClick:Null<Void->Void>;
     var label:FlxText;
+    var bg:FlxSprite;
+    public var size = {
+        width: 0,
+        height: 0
+    }
 
     public function new(options:TopButtonOption, x:Float, y:Float){
         super(x, y);
-        label = new FlxText(x, y, 0, options.label);
+        label = new FlxText(x + 9, y, 0, options.label, 15);
+        
+        onClick = options.onClick;
+        size.width = Math.ceil(label.width) + 10;
+        size.height = Math.ceil(label.height) + 6;
+
+        bg = new FlxSprite(x + 10, y + 4).makeGraphic(size.width, size.height, 0xFF9A3CC0);
+        add(bg);
         add(label);
 
-        onClick = options.onClick;
+        add(label);
     }
 
     public override function update(elapsed:Float){

@@ -76,7 +76,7 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
-        FlxG.sound.playMusic(Paths.music("freakyMenu"), 0); // crash fix
+        FlxG.sound.playMusic(Paths.music("crashFix"), 0); // crash fix
 		FlxG.sound.music.stop();
 		FlxG.save.bind('funkin', 'Team-UniverseEngine');
 		ClientPrefs.loadPrefs();
@@ -428,16 +428,17 @@ class TitleState extends MusicBeatState
 
 			FlxG.camera.flash(FlxColor.WHITE, 1);
 			FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
+			if (FlxG.sound.music.volume < 1) FlxG.sound.music.fadeIn(0.5, FlxG.sound.music.volume, 1, (_)->{ // fix for the music being muted on outdated state.
+				transitioning = true;
+				// FlxG.sound.music.stop();
 
-			transitioning = true;
-			// FlxG.sound.music.stop();
-
-			if (!mustUpdate)
-				FlxG.switchState(new MainMenuState());
-			else
-				FlxG.switchState(new OutdatedSubState());
-			closedState = true;
-			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
+				if (!mustUpdate)
+					FlxG.switchState(new MainMenuState());
+				else
+					FlxG.switchState(new OutdatedSubState());
+				closedState = true;
+				// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
+			});
 		}
 
 		if (pressedEnter && !skippedIntro && initialized)
