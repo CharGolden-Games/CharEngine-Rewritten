@@ -19,6 +19,8 @@ class SettingState extends MusicBeatState
     public override function create() {
         super.create();
 
+        FlxG.mouse.visible = true;
+
         FlxG.sound.playMusic(Paths.music("shop", "shared"));
         var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.menuBG("blue"));
         bg.scrollFactor.set();
@@ -134,6 +136,11 @@ class SettingState extends MusicBeatState
             else
                 text.alpha = 0.6;
         });
+    }
+
+    public override function switchTo(nextState:FlxState):Bool {
+        FlxG.mouse.visible = false;
+        return super.switchTo(nextState);
     }
 }
 

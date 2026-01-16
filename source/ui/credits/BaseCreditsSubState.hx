@@ -52,7 +52,7 @@ class BaseCreditsSubState extends MusicBeatSubstate
 
         descBox = new FlxSprite().makeGraphic(FlxG.width, 10, 0xFF000000);
         descBox.cameras = [camDesc];
-        descBox.alpha = 0.8;
+        descBox.alpha = 0.5;
         add(descBox);
 
         alphabet = new Alphabet(0, 0, title);

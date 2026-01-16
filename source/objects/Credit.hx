@@ -43,10 +43,11 @@ class Credit extends FlxTypedSpriteGroup<FlxSprite>
 
         if (icon != null)
         {
-            alphabet.x += 200;
+            alphabet.x += 100;
+            alphabet.y += 50;
             alphabet.snapToPosition();
 
-            this.icon = new FlxSprite().loadGraphic(Paths.image('credits/$icon'));
+            this.icon = new FlxSprite(-100).loadGraphic(Paths.image('credits/$icon'));
             add(this.icon);
             this.icon.antialiasing = ClientPrefs.data.antialiasing;
         }
