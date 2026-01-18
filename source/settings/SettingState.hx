@@ -47,6 +47,16 @@ class SettingState extends MusicBeatState
     public override function update(elapsed:Float) {
         super.update(elapsed);
 
+        for (i in top){
+            if (FlxG.mouse.overlaps(i)){
+                if (FlxG.mouse.justPressed){
+                    FlxG.sound.play(Paths.sound("scrollMenu"));
+                    changeSelection(i.ID, true);
+                }
+            }
+        }
+
+        // options selection
         if (controls.UI_DOWN_P)
         {
             changeSetting(1);
@@ -56,13 +66,14 @@ class SettingState extends MusicBeatState
             changeSetting(-1);
         }
 
+        // tab selection
         if (controls.UI_RIGHT_P)
         {
-            changeSelection(1);
+            changeSelection(1, false);
         }
         if (controls.UI_LEFT_P)
         {
-            changeSelection(-1);
+            changeSelection(-1, false);
         }
         if (controls.ACCEPT)
         {
@@ -75,10 +86,10 @@ class SettingState extends MusicBeatState
         }
     }
 
-    function changeSelection(change:Int = 0)
+    function changeSelection(change:Int = 0, direct:Bool = false)
     {
         FlxG.sound.play(Paths.sound("scrollMenu"));
-        top.changeIndex(change);
+        top.changeIndex(change, direct);
 
         loadSettings();
     }

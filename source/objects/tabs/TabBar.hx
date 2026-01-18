@@ -51,13 +51,17 @@ class TabBar extends FlxTypedSpriteGroup<TabButton>{
         if (oc != null) oc();
     }
 
-    public function changeIndex(change:Int = 0)
+    public function changeIndex(change:Int = 0, direct:Bool = false)
     {
-        index += change;
-        if (index > trueLength - 1)
-            index = 0;
-        if (index < 0)
-            index = trueLength - 1;
+        if (!direct){
+           index += change;
+           if (index > trueLength - 1)
+               index = 0;
+           if (index < 0)
+               index = trueLength - 1;
+        }
+        else
+            index = change;
 
         forEachExists((button)->{
             if (button.ID == index)
