@@ -50,8 +50,7 @@ class SettingState extends MusicBeatState
         for (i in top){
             if (FlxG.mouse.overlaps(i)){
                 if (FlxG.mouse.justPressed){
-                    FlxG.sound.play(Paths.sound("scrollMenu"));
-                    top.setIndex(i.ID);
+                    setIndex(i.ID);
                 }
             }
         }
@@ -90,6 +89,14 @@ class SettingState extends MusicBeatState
     {
         FlxG.sound.play(Paths.sound("scrollMenu"));
         top.changeIndex(change);
+
+        loadSettings();
+    }
+
+    function setIndex(i:Int = 0)
+    {
+        FlxG.sound.play(Paths.sound("scrollMenu"));
+        top.setIndex(i);
 
         loadSettings();
     }
