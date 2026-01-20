@@ -24,7 +24,6 @@ class UECredits extends BaseCreditsSubState
         addCredit("Special Thanks");
 
         addCredit("An Ammar", "Ammar", 0xFF00FF00, "https://gamebanana.com/mods/381804", "Hype Mode, Detached Health Bar, Playtester (Pre 1.0)");
-        addCredit("Dinus Game", "Dinus Game", 0xFF27FF27, "https://gamebanana.com/members/2053946", "freakyMenu Universe Engine music.");
         addCredit("ShadowMario", "shadowmario", 0xFF444444, 'https://twitter.com/Shadow_Mario_', "Some code borrowed from Psych");
     }
 }

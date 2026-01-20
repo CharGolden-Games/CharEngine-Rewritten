@@ -16,6 +16,7 @@ import openfl.media.Video;
 import openfl.net.NetConnection;
 import openfl.net.NetStream;
 import openfl.events.UncaughtErrorEvent;
+import ui.TitleState;
 
 class Main extends Sprite
 {
@@ -88,6 +89,14 @@ class Main extends Sprite
 		fpsVar = new FPS(10, 3, 0xFFFFFF);
 		addChild(fpsVar);
 		#end
+	}
+
+	public static function setupSignals()
+	{
+		FlxG.signals.preStateSwitch.add(()->{
+			FlxG.save.data.volume = FlxG.sound.volume;
+			FlxG.save.flush();
+		});
 	}
 
 	function onCrash(e:UncaughtErrorEvent):Void

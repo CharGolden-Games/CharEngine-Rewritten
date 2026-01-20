@@ -90,10 +90,11 @@ class ClientPrefs
 		{
 			Reflect.setField(FlxG.save.data, field, Reflect.field(data, field));
 		}
+		FlxG.save.data.volume = FlxG.sound.volume;
 		FlxG.save.flush();
 
 		var save:FlxSave = new FlxSave();
-		save.bind("controls_v2", "CharGoldenGames");
+		save.bind("controls_v2", CoolUtil.saveFolder);
 
 		save.data.keyboard = keyBinds;
 		save.data.gamepad = gamepadBinds;
@@ -114,6 +115,7 @@ class ClientPrefs
 				Reflect.setField(data, field, Reflect.field(FlxG.save.data, field));
 			}
 		}
+		FlxG.sound.volume = FlxG.save.data.volume;
 
 		reloadBinds();
 	}
@@ -148,7 +150,7 @@ class ClientPrefs
 	public static function reloadBinds()
 	{
 		var save:FlxSave = new FlxSave();
-		save.bind("controls_v2", "CharGoldenGames");
+		save.bind("controls_v2", CoolUtil.saveFolder);
 
 		if(save != null)
 		{
