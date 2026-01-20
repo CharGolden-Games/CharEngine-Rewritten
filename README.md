@@ -3,7 +3,7 @@
 
   <h3>
     <img src="art/icon64.png" width="25">
-    Universe engine - Yet another <a href="https://github.com/ShadowMario/FNF-PsychEngine">Psych Engine</a> fork.
+    Universe engine - Previously yet another <a href="https://github.com/ShadowMario/FNF-PsychEngine">Psych Engine</a> fork.
   </h3>
   
   <p>
@@ -104,3 +104,4 @@ Did you know I'm making a mo-" </th>
   We are currently not hiring and probably never. <br>
   We only invite people to join the Developer team.
 </p>
+
