@@ -21,7 +21,7 @@
 
 <h3> ❓ What is Universe Engine? </h3> <!-- its an engine of the universe -->
 <p>
-  Universe Engine is a <b>HEAVILY</b> modified <a href="https://github.com/ShadowMario/FNF-PsychEngine">Psych Engine</a> fork with additional useful features. <br>
+  Universe Engine is an engine built off of 0.2.8 with additional useful features. <br>
   Such as:
   <ul>
     <li> Modcharting Tool </li>
@@ -104,4 +104,5 @@ Did you know I'm making a mo-" </th>
   We are currently not hiring and probably never. <br>
   We only invite people to join the Developer team.
 </p>
+
 
