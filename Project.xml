@@ -194,6 +194,10 @@
 	<define name="ALLOW_DISCORD"/>
 	<define name="ALLOW_DEBUGOPTIONS"/>
 	<define name="DEBUGMENUS" if="ALLOW_DEBUGOPTIONS" />
+
+	
+	<!--Disable deprecated warnings-->
+	<haxedef name='no-deprecation-warnings' unless="debug" />
 	
 	<!-- <haxedef name="CLEAR_INPUT_SAVE"/> -->
 	
