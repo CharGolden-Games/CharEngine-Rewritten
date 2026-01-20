@@ -1,6 +1,5 @@
 package settings;
 
-import flixel.FlxSprite;
 import backend.SettingData;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import objects.tabs.TabBar;
