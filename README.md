@@ -1,108 +1,67 @@
-<div align="center"> 
-  <img src="assets/exclude/images/Universe Engine.png" width="568" height="285"> <br>
+# Char Engine | The self-proclaimed kickass Friday Night Funkin' engine based on the newgrounds preview (0.2.8) 😎
 
-  <h3>
-    <img src="art/icon64.png" width="25">
-    Universe engine - Previously yet another <a href="https://github.com/ShadowMario/FNF-PsychEngine">Psych Engine</a> fork.
-  </h3>
-  
-  <p>
-    <a href="https://discord.gg/RaHmP5fgyA">
-      Join The OFFICIAL Universe Engine Discord Server!
-    </a> <br>
-    <a href="https://universe-engine.netlify.app">
-      Check out the Universe Engine Website!
-    </a>
-  </p>
-</div>
+# Compiling
+### Windows:
+- [Install the neccassary Haxelibs](tools/haxelibs.bat)
+- [Install Visual Studio](github.com/ShadowMario/FNF-PsychEngine/blob/main/setup/windows-msvc.bat)
+- `lime test windows` or `lime build windows`
+- Done!
 
+### Unix:
+- [Install the neccassary haxelibs](tools/haxelibs.sh)
+- install gcc (Linux) or install XCode (Mac)
+- `lime test` or `lime build` with `linux` or `mac` at the end depending on what you're using.
+- Done!
 
----
+# How To Play:
+> [!NOTE]
+> Don't keep this stupid joke around too long.
 
-<h3> ❓ What is Universe Engine? </h3> <!-- its an engine of the universe -->
-<p>
-  Universe Engine is an engine built off of 0.2.8 with additional useful features. <br>
-  Such as:
-  <ul>
-    <li> Modcharting Tool </li>
-    <li> Customizability </li>
-    <li> Easier Modding (hopefully) </li>
-    <li> HScript </li>
-    <li> Custom HScript States </li>
-    <li> Cleaner UI </li>
-  </ul>
-</p>
+Have you played Friday Night Funkin' before? It's that.
 
----
+<details>
+	<summary><h1>Planned Features:</h1></summary>
 
-<h3> 🎯 What we aim for: </h3>
-<p>
-  Cross platform for
-  <ul>
-    <li> 🐧 Linux </li>
-    <li> 🪟 Windows </li>
-    <li> 🍎 MacOS </li>
-  </ul>
+- # Chart Editor
+	- ## Modchart Editor 
+		Make and test a modchart, right from the chart editor!
 
-  Performance for low-end devices (Hopefully on their way!)
-  
-  Provide the modders an easier way to mod. <br>
-  And give the players more customization.
-</p>
+		[TODO: This should contain instructions and previews of the editor.]
+	
+	- ## Specialty Notes - Typed Notes
+		If you've used Notetypes in other engines, this is just that.
+	
+	- ## Specialty Notes - Ghost Tap Note
+		> Ghost Tapping MUST be enabled for this note to function
 
----
+		| Player  | Opponent/Botplay |
+		| ------ | -------- |
+		| Is immediately destroyed when spawned. | Simulates pressing a note key with no notes present. |
 
-<h3> 👑 Who created and helped this engine? </h3>
-<table align="center">
-  <tr>
-    <th>Contributor Names</th>
-    <th> <img src="https://daveberry.netlify.app/otherImages/dave.png" width="25"> Daveberry   </th>
-    <th> <img src="https://github.com/VideoBotYT/Universe-Engine/blob/main/assets/preload/images/credits/videobot.png?raw=true" width="25"> VideoBot </th>
-    <th> <img src="https://github.com/VideoBotYT/Universe-Engine/blob/main/assets/preload/images/credits/baranmuzu.png?raw=true" width="25"> BaranMuzu </th>
-    <th> <img src="https://github.com/CharGoldenYT/CharGoldenYT/blob/main/cha.png?raw=true" width="25"> CharGoldenYT </th>
-  </tr>
+	- ## Specialty Notes - Force Miss Note
+		| Player (Ghost Tapping Disabled) | Opponent/Botplay |
+		| ------ | -------- |
+		| Makes the player take a miss. | Simulates a player missing a note.
 
-  <tr>
-    <th>Initial Role</th>
-    <th> Created the engine. </th>
-    <th> Created the engine. </th>
-    <th> Invited to help. </th>
-    <th> Invited to help. </th>
-  </tr>
+	- ## HUD Defines - Extra Icons
+		You can define extra health icons to add to the ui, whether it should follow the player/opponent's icon or the exact position the icon should be at.
 
-  <tr>
-    <th>Role</th>
-    <th> Former Developer </th>
-    <th> Main Developer </th>
-    <th> Former Developer </th>
-    <th> Invited Developer </th>
-  </tr>
+	- ## HUD Defines - Force HUD Style
+		Sets the HUD to specific behaviour defined in `assets/data/hudStyles/<hud_name>.hud` [1]
 
-  <tr>
-    <th> Personal Message </th>
-    <th> "I'M NOT FUCKING GAY" </th>
-    <th> "I love MODCHARTING" </th>
-    <th> "idk" </th>
-    <th> "sup guys I was <s>forced</s> asked to join the team
-Did you know I'm making a mo-" </th>
-  </tr>
-</table>
+		Available default styles:
 
----
+		- `Char Engine/Default`
 
-<h3> 🫵❓ How could YOU help? </h3>
-<p>
-  You can either:
-  <ul>
-    <li> Submit Issues with the engine </li>
-    <li> Submit Pull Requests (Bugs, QOL, etc...) </li>
-  </ul>
-</p>
+		- `Funkin'`
 
-<h3> ☝️❓ How can YOU join the Developer team? </h3>
-<p>
-  We are currently not hiring and probably never. <br>
-  We only invite people to join the Developer team.
-</p>
+		- `Psych Like`
+
+		- `VS Char`
 
 
+	# Notes:
+
+	[1]: `.hud` is just a json file, you can define custom hud elements behaviour by following <s> <a href="docs/customHudBehaviour.md"> this guide </s> Guide not made yet.</a>
+
+</details>

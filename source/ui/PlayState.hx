@@ -153,6 +153,7 @@ class PlayState extends MusicBeatState
 
 	var talking:Bool = true;
 	var scoreTxt:FlxText;
+	var ratingTxt:FlxText;
 
 	var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
 
@@ -178,9 +179,37 @@ class PlayState extends MusicBeatState
 	var lightFadeShader:BuildingShaders;
 
 	var ratingShit(get, null):Array<Array<Dynamic>>;
+	var accFormat:FlxTextFormat = new FlxTextFormat(0xFF888888, false, false, 0);
+	var ratingColors:Array<FlxColor> = 
+	[
+		0xFFAA0000,
+		0xFFDC0000,
+		0xFFFF0000,
+		0xFFFF8A00,
+		0xFFFFBB00,
+		0xFFFF6969,
+		0xFF224422,
+		0xFF448844,
+		0xFF00FF00,
+		0xFF00FF00
+	];
 
 	function get_ratingShit():Array<Array<Dynamic>>
 	{
+		#if ALLOW_CECUSTOMIZATIONS
+		return [
+				['COORDINATION, HAVE YOU HEARD OF IT?', 0.2], // From 0% to 19%
+				['Are you even hitting the notes?', 0.4], // From 20% to 39%
+				['Get better nerd.', 0.5], // From 40% to 49%
+				['Bruh', 0.6], // From 50% to 59%
+				['Gettin\' there.', 0.69], // From 60% to 68%
+				['Hehe, Funny Number', 0.7], // 69%
+				['Pretty Nice', 0.8], // From 70% to 79%
+				['Kickin\' Ass!', 0.9], // From 80% to 89%
+				['HELL YEAH!', 1], // From 90% to 99%
+				['YOU ARE A BOT!!', 1] // The value on this one isn't used actually, since Perfect is always "1"
+			];
+		#else
 		return [
 				['You Suck!', 0.2], //From 0% to 19%
 				['Shit', 0.4], //From 20% to 39%
@@ -193,6 +222,7 @@ class PlayState extends MusicBeatState
 				['Sick!', 1], //From 90% to 99%
 				['Perfect!!', 1] //The value on this one isn't used actually, since Perfect is always "1"
 			];
+		#end
 	}
 
 	public static var instance:PlayState;
@@ -867,7 +897,7 @@ class PlayState extends MusicBeatState
 
 		FlxG.fixedTimestep = false;
 
-		healthBarBG = new FlxSprite(0, FlxG.height * 0.88).loadGraphic(Paths.image('healthBar'));
+		healthBarBG = new FlxSprite(0, FlxG.height * 0.86).loadGraphic(Paths.image('healthBar'));
 		healthBarBG.screenCenter(X);
 		healthBarBG.scrollFactor.set();
 		add(healthBarBG);
@@ -881,12 +911,20 @@ class PlayState extends MusicBeatState
 		getHealthbarColors();
 		add(healthBar);
 
-		scoreTxt = new FlxText(0, healthBarBG.y + 50, 0, 'Score: 0 | Misses: 0 | Rating: N/A', 20);
+		scoreTxt = new FlxText(0, healthBarBG.y + 50, 0, 'Score: 0', 20);
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		scoreTxt.borderSize = 2;
 		scoreTxt.screenCenter(X);
 		add(scoreTxt);
+
+		ratingTxt = new FlxText(0, scoreTxt.y + 20, 0, "Rating: YOU HAVEN'T DONE SHIT YET");
+		ratingTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		ratingTxt.scrollFactor.set();
+		ratingTxt.borderSize = 2;
+		ratingTxt.screenCenter(X);
+		ratingTxt.addFormat(accFormat, 8, 33);
+		add(ratingTxt);
 
 		iconP1 = new HealthIcon(SONG.player1, true);
 		iconP1.y = healthBar.y - (iconP1.height / 2);
@@ -896,7 +934,7 @@ class PlayState extends MusicBeatState
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 		add(iconP2);
 
-		grpNoteSplashes.cameras = [camHUD];
+		grpNoteSplashes.cameras = [camNotes];
 		strumLineNotes.cameras = [camNotes];
 		notes.cameras = [camNotes];
 		healthBar.cameras = [camHUD];
@@ -904,6 +942,7 @@ class PlayState extends MusicBeatState
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
+		ratingTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
 
 		// if (SONG.song == 'South')
@@ -1992,6 +2031,7 @@ class PlayState extends MusicBeatState
 		super.update(elapsed);
 
 		updateScoreTxt();
+		updateRatingTxt();
 
 		if (controls.PAUSE && startedCountdown && canPause)
 		{
@@ -2340,7 +2380,8 @@ class PlayState extends MusicBeatState
 	}
 
 	var ratingFC:String = '';
-	var rating:String = '';
+	var rating:String = 'YOU HAVEN\'T DONE SHIT YET';
+	var nextColor:FlxColor = 0xFF888888;
 	function recalcFC()
 	{
 			var accuracy = totalNotesHit / totalPlayed;
@@ -2355,6 +2396,7 @@ class PlayState extends MusicBeatState
 					if (accuracy < ratingShit[i][1])
 					{
 						rating = ratingShit[i][0];
+						nextColor = ratingColors[i];
 						break;
 					}
 				}
@@ -2372,9 +2414,30 @@ class PlayState extends MusicBeatState
 		if (totalPlayed < 1) return;
 		var ratingPercent = Math.min(1, Math.max(0, totalNotesHit / totalPlayed));
 		recalcFC();
-		
-		scoreTxt.text = 'Score: $songScore | Misses: $songMisses | Rating: $rating (${floorDecimal(ratingPercent * 100, 2)}% / $ratingFC)';
+
+		scoreTxt.text = 'Score: $songScore | Messed up $songMisses times | Accuracy: ${floorDecimal(ratingPercent * 100, 2)}% [$ratingFC]';
 		scoreTxt.screenCenter(X);
+	}
+
+	function updateRatingTxt()
+	{
+		var youSuck:String = '';
+		if (songMisses > 0)
+		{
+			youSuck = " (Actually you fucking suck.)";
+		}
+		ratingTxt.text = 'Rating: ' + rating + youSuck;
+		ratingTxt.screenCenter(X);
+		@:privateAccess
+		{
+			accFormat.format.color = nextColor;
+
+			for (i => frmtRange in ratingTxt._formatRanges) if (frmtRange.format == accFormat) {
+				ratingTxt._formatRanges[i].range.start = (ratingTxt.text.length - (rating.length + youSuck.length)) - 1;
+				ratingTxt._formatRanges[i].range.end = ratingTxt.text.length + 1;
+				break;
+			}
+		}
 	}
 
 	function killCombo(?doMiss:Bool = true):Void

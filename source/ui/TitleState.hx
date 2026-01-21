@@ -157,12 +157,12 @@ class TitleState extends MusicBeatState
 		{
 			trace("Let's see if you updated >:(");
 
-			var http = new Http("https://raw.githubusercontent.com/Team-UniverseEngine/Universe-Engine/refs/heads/main/gitVersion.txt");
+			var http = new Http("https://github.com/CharGolden-Games/CharEngine-Rewritten/blob/Master/gitVersion.txt");
 
 			http.onData = function (data:String)
 			{
 				var updateVersion = (OutdatedSubState.nextVer = data.split('\n')[0].trim());
-				var curVersion:String = MainMenuState.ueVersion.trim();
+				var curVersion:String = MainMenuState.charEngineVersion.trim();
 				trace('version online: ' + updateVersion + ', your version: ' + curVersion);
 				if(updateVersion != curVersion) {
 					trace('versions arent matching!');

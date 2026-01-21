@@ -113,7 +113,6 @@ class PauseSubState extends MusicBeatSubstate
 			item.isMenuItem = true;
 			item.targetY = i;
 			item.changeX = false;
-			if (ClientPrefs.data.uiStyle == "Universe Engine") item.screenCenter(X);
 			grpMenuShit.add(item);
 		}
 

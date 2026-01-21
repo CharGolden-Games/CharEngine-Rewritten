@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Funkin': Universe Engine" file="UniverseEngine" packageName="com.teamuniverse.universeengine" package="com.teamuniverse.universeengine" main="Main" version="0.2.8" company="Team Universe Engine" />
+	<app title="Friday Night Funkin': Char Engine" file="CharEngine" packageName="com.chargolden.charengine" package="com.chargolden.charengine" main="Main" version="0.2.8" company="Char Golden Games" />
 	
 
 	<!--Switch Export with Unique ApplicationID and Icon-->
@@ -193,7 +193,8 @@
 	<haxedef name="CAN_CHEAT" if="switch debug"/>
 	<define name="ALLOW_DISCORD"/>
 	<define name="ALLOW_DEBUGOPTIONS"/>
-	<define name="DEBUGMENUS" if="ALLOW_DEBUGOPTIONS" />
+	<define name="ALLOW_CECUSTOMIZATIONS"/>
+	<define name="DEBUGMENUS" if="ALLOW_DEBUGOPTIONS"/>
 
 	
 	<!--Disable deprecated warnings-->

@@ -17,7 +17,7 @@ using StringTools;
 
 class MainMenuState extends MusicBeatState
 {
-	public static var ueVersion:String = '1.0.0 - The Full Ass Rewrite';
+	public static var charEngineVersion:String = '1.0.0';
 	var curSelected:Int = 0;
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
@@ -88,7 +88,7 @@ class MainMenuState extends MusicBeatState
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
-		var versionShit:FlxText = new FlxText(5, FlxG.height - 38, 0, "Univers Engine V" + ueVersion, 12);
+		var versionShit:FlxText = new FlxText(5, FlxG.height - 38, 0, "Char Engine V" + charEngineVersion, 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
